@@ -248,7 +248,7 @@
 							<thead>
 								<tr>
 									<th>No</th>
-									<th>Customer Name</th>
+									<th>Customer Type</th>
 									<th>Aksi</th>
 								</tr>
 							</thead>
