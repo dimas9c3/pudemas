@@ -1,0 +1,36 @@
+/* Table */
+tbody {
+	color: #000000;
+}
+
+/* Footer */
+.main-footer {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	display: block;
+}
+
+/* Plugins */
+
+/* Select2 */
+.select2-dropdown.increasedzindexclass {
+	z-index: 999999;
+}
+
+.select2-container--open{
+	z-index:9999999;
+}
+
+.select2-container {
+	width: 100% !important;
+	padding: 0;
+}
+
+.select2-container--default .select2-selection--single {
+	min-height: 2.8rem;
+}
+
+.selection {
+	width: 100%;
+}
