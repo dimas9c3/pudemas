@@ -1,15 +1,14 @@
+/* Leaflet */
+.courier-location {
+	height: 380px;
+}
+
 /* Table */
 tbody {
 	color: #000000;
 }
 
 /* Footer */
-.main-footer {
-	position: absolute;
-	bottom: 0px;
-	width: 100%;
-	display: block;
-}
 
 /* Plugins */
 
@@ -34,3 +33,4 @@ tbody {
 .selection {
 	width: 100%;
 }
+

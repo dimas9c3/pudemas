@@ -5,6 +5,17 @@
 	<!-- Begin Page Header-->
 	<div class="row">
 		<div class="page-header">
+			@role('Kurir')
+			@if (!empty($job_pickup))
+			@foreach ($job_pickup as $i)
+			<div class="alert alert-success alert-dismissible fade show">
+				<span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>
+				<span class="alert-inner--text"><strong>Anda Mendapatkan Job Pengambilan Barang ID :  {{ $i->id_pickup }} <hr> <a href="{{ url('/pickup/getPickupActiveById/'.$i->id_pickup) }}" class="btn btn-primary">Detail Job</a></strong></span>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+			</div>
+			@endforeach
+			@endif
+			@endrole
 			<div class="d-flex align-items-center">
 				<h2 class="page-header-title">{{ $page }}</h2>
 				<div>

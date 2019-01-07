@@ -21,8 +21,8 @@
 			<div class="d-flex align-items-center">
 				<div>
 					<div class="page-header-tools">
-						<button type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#add-customer">Tambah Data</button>
-						<button type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#customer-type" >Data Jenis Customer</button>
+						<button type="button" class="btn btn-gradient-01 mb-1" data-toggle="modal" data-target="#add-customer">Tambah Customer</button>
+						<button type="button" class="btn btn-gradient-01 mb-1" data-toggle="modal" data-target="#customer-type" >Data Jenis Customer</button>
 					</div>
 				</div>
 			</div>
@@ -48,7 +48,7 @@
 			<div class="alert alert-danger alert-dismissible fade show">
 				<span class="alert-inner--icon"><i class="ni ni-fat-remove"></i></span>
 				<span class="alert-inner--text">
-					<strong>Whoops!</strong> Inputan anda tidak sesuai dengan format yang sesuai.<br><br>
+					<strong>Whoops!</strong> Inputan anda tidak sesuai dengan format yang ditentukan. Pastikan Nomor Hp diawali "08" lalu diikuti digit nomor yang benar.<br><br>
 					<ul>
 						@foreach ($errors->all() as $error)
 						<li>{{ $error }}</li>
@@ -121,19 +121,19 @@
 						</div>
 					</div>
 					<div class="form-group row d-flex align-items-center mb-2">
-						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Email</label>
+						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Email *</label>
 						<div class="col-lg-9">
 							<input type="text" name="email" class="form-control" placeholder="Input Email">
 						</div>
 					</div>
 					<div class="form-group row d-flex align-items-center mb-2">
-						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Hp</label>
+						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Hp *</label>
 						<div class="col-lg-9">
 							<input type="text" name="phone" class="form-control" placeholder="Input Nomor Hp">
 						</div>
 					</div>
 					<div class="form-group row d-flex align-items-center mb-2">
-						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Alamat</label>
+						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Alamat *</label>
 						<div class="col-lg-9">
 							<textarea name="address" class="form-control" rows="5" placeholder="Input Alamat"></textarea>
 						</div>
@@ -367,6 +367,9 @@
 @section('js')
 <script>
 	$(document).ready(function() {
+		document.getElementById("master-link").classList.add('active');
+		document.getElementById("master-link2").setAttribute('aria-expanded','TRUE');
+		document.getElementById("dropdown-master").classList.add('show');
 		document.getElementById("customer-link").classList.add('active');
 		datatables.table_customer();
 		datatables.table_customer_type();

@@ -20,6 +20,9 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->enum('is_free', ['0','1'])->default('1');
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longtitude', 11, 8)->nullable();
             $table->timestamps();
         });
     }

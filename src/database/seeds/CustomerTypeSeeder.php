@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class CustomerTypeSeeder extends Seeder
 {
@@ -12,7 +13,9 @@ class CustomerTypeSeeder extends Seeder
     public function run()
     {
         DB::table('customer_type')->insert([
-            'name' => str_random(10),
+            'name' => 'Perorangan',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
     }
 }

@@ -16,9 +16,14 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+         $this->middleware('permission:master-customers');
+    }
+
     public function index()
     {
-        $data['title']          = 'PUDEMAS - Customer';
+        $data['title']          = 'Data Customer - PUDEMAS';
         $data['page']           = 'Data Customer';
         return view('customer')->with($data);
     }
@@ -49,7 +54,7 @@ class CustomerController extends Controller
             })
             ->make(true);
           } catch (\Exception $e) {
-             
+             dd($e->getMessage());
           }  
     }
 
@@ -71,7 +76,7 @@ class CustomerController extends Controller
 
             return response()->json($customer);
         } catch (\Exception $e) {
-            
+            dd($e->getMessage());
         }
 
     }
@@ -97,7 +102,7 @@ class CustomerController extends Controller
             })
             ->make(true);
           } catch (\Exception $e) {
-              
+                dd($e->getMessage());
           }  
     }
 
@@ -114,9 +119,9 @@ class CustomerController extends Controller
             $validator = Validator::make($request->all(),[
                 'name' => 'required|min:3',
                 'type' => 'required',
-                'email' => 'email',
-                'phone' => 'min:11',
-                'address' => 'min:3',
+                'email' => 'required|email',
+                'phone' => 'required|regex:/(08)[0-9]{9}/|max:13|min:11',
+                'address' => 'required|min:3',
             ]);
 
             if ($validator->fails()) {
@@ -179,6 +184,20 @@ class CustomerController extends Controller
     public function updateCustomer(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(),[
+                'name' => 'required|min:3',
+                'type' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required|regex:/(08)[0-9]{9}/|max:13|min:11',
+                'address' => 'required|min:3',
+            ]);
+
+            if ($validator->fails()) {
+            return redirect()->route('customer')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
             $customer                   = Customer::find($request->id);
             $customer->name             = $request->name;
             $customer->customer_type    = $request->type;
@@ -198,6 +217,16 @@ class CustomerController extends Controller
     public function updateCustomerType(Request $request)
     {
         try {
+             $validator = Validator::make($request->all(),[
+                'name' => 'required|min:4',
+            ]);
+
+            if ($validator->fails()) {
+            return redirect()->route('customer')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
             $crud               = CustomerType::find($request->id);
             $crud->name         = $request->name;
             $crud->save();
@@ -269,7 +298,33 @@ class CustomerController extends Controller
 
             return response()->json($select);
         } catch (\Exception $e) {
-            
+            dd($e->getMessage());
+        }
+    }
+
+    public function selectCustomer(Request $request)
+    {
+        $select = [];
+        try {
+            if ($request->has('q')) {
+                $search         = $request->q;
+                $select         = DB::table('customer')
+                ->select('id','name as text')
+                ->where('name', 'like', "%$search%")
+                ->orderBy('name','asc')
+                ->get();   
+            }else {
+                $select         = Customer::select([
+                    'id',
+                    'name as text',
+                ])
+                ->orderBy('name','asc')
+                ->get();
+            }
+
+            return response()->json($select);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
     }
 }

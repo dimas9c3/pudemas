@@ -10,12 +10,25 @@ class RolesHasPermissionTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-        for ($i=1;$i<=8;$i++) {
-        DB::table('role_has_permissions')->insert([
-            'permission_id' => $i,
-            'role_id' => '1',
-        ]);
+    {   
+        $pimpinans = [
+            '1','2','3','4','5',
+        ];
+        foreach ($pimpinans as $pimpinan) {
+            DB::table('role_has_permissions')->insert([
+                'permission_id' => $pimpinan,
+                'role_id' => '2',
+            ]);
+        }
+
+        $admins = [
+            '3','4','5',
+        ];
+        foreach ($admins as $admin) {
+            DB::table('role_has_permissions')->insert([
+                'permission_id' => $admin,
+                'role_id' => '1',
+            ]);
         }
     }
 }

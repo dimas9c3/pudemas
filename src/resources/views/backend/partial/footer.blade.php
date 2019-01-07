@@ -36,6 +36,8 @@
 <script src="{{ asset('plugins/datatables/js/jquery.dataTables.min.js') }}"></script>
 <!-- Select2 -->
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<!-- Leaflet -->
+<script src="{{ asset('plugins/leaflet/leaflet.js') }}"></script>
 <!-- End Page Vendor Js -->
 <!-- Begin Page Snippets -->
 <!-- APP Master -->

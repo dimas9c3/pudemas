@@ -19,5 +19,29 @@ class UsersTableSeeder extends Seeder
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
+
+        DB::table('users')->insert([
+            'name' => 'Pimpinan',
+            'email' => 'admin@iamhermawan.com',
+            'password' => bcrypt('password'),
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Kurir 1',
+            'email' => 'dimas.visualb@gmail.com',
+            'password' => bcrypt('password'),
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')   
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Kurir 2',
+            'email' => 'dimas_9c3@yahoo.co.id',
+            'password' => bcrypt('password'),
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s') 
+        ]);
     }
 }
