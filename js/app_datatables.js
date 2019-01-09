@@ -117,6 +117,32 @@ var datatables = {
         })
     },
 
+     // Table Pickup finish
+    table_pickup : function() {
+        $('#table-pickup-active').DataTable({
+            processing : true,
+            serverSide : true,
+            ajax : getPickup,
+            columns : [
+            {data: 'id_pickup'},
+            {data: 'status'},
+            {data: 'courier_name'},
+            {data: 'type'},
+            {data: 'is_send_to_customer'},
+            {data: 'item_name'},
+            {data: 'supplier_name'},
+            {data: 'qty'},
+            {data: 'purchase_price'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            paging : true,
+            searching : true,
+            lengthChange : true,
+            info : true,
+            aaSorting : [],
+        })
+    },
+
     // Table Pickup Active
     table_pickup_active : function() {
         $('#table-pickup-active').DataTable({

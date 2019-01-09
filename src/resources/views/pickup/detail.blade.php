@@ -25,7 +25,11 @@
 						);
 						@endphp
 						@if($pickup[0]->status == 3)
-						<a href="{{ route('acceptPickupJob',['id_pickup' => $pickup[0]->id_pickup,'is_send_to_customer' => $pickup[0]->is_send_to_customer]) }}" class="btn btn-gradient-01 mb-1">Ambil Job</a>
+						<a href="{{ route('changePickupJob',['id_pickup' => $pickup[0]->id_pickup,'is_send_to_customer' => $pickup[0]->is_send_to_customer, 'changeTo' => '2']) }}" class="btn btn-gradient-01 mb-1">Ambil Job</a>
+						@elseif($pickup[0]->status == 2)
+						<a href="{{ route('changePickupJob',['id_pickup' => $pickup[0]->id_pickup,'is_send_to_customer' => $pickup[0]->is_send_to_customer, 'changeTo' => '1']) }}" class="btn btn-gradient-01 mb-1">Barang Terambil</a>
+						@elseif($pickup[0]->status == 1)
+						<a href="{{ route('changePickupJob',['id_pickup' => $pickup[0]->id_pickup,'is_send_to_customer' => $pickup[0]->is_send_to_customer, 'changeTo' => '0']) }}" class="btn btn-gradient-01 mb-1">Pickup Selesai</a>
 						@endif
 						@endrole
 					</div>
@@ -191,7 +195,6 @@
 	}
 
 	function onLocationError(e) {
-		alert(e.message);
 		console.log(e.message);
 	}
 

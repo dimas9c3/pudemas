@@ -32,6 +32,7 @@
 				<li id="pickup-link"><a id="pickup-link2" href="#dropdown-pickup" aria-expanded="false" data-toggle="collapse"><i class="la la-cart-arrow-down"></i><span>Transaksi Pengambilan</span></a>
 					<ul id="dropdown-pickup" class="collapse list-unstyled pt-0">
 						@role('Admin|Pimpinan')
+						<li><a id="pickup-active-link" href="{{ route('pickup') }}">Data Pengambilan Selesai</a></li>
 						<li><a id="pickup-active-link" href="{{ route('pickupActive') }}">Data Pengambilan Aktif</a></li>
 						<li><a id="add-pickup-link" href="{{ route('createPickup') }}">Input Pengambilan</a></li>
 						@endrole
