@@ -82,14 +82,16 @@ Route::group(['middleware' => ['auth'], ['as' => 'supplier-route']], function() 
 
 //Pick Up Class Route
 Route::group(['middleware' => ['auth'], ['as' => 'pickup-route']], function() {
+	Route::get('/pickup', 'PickupController@index')->name('pickup');
 	Route::get('/pickup/active', 'PickupController@pickupActive')->name('pickupActive');
 	Route::get('/pickup/activeCourier', 'PickupController@pickupActiveCourier')->name('pickupActiveCourier');
+	Route::get('/pickup/getPickup', 'PickupController@getPickup');
 	Route::get('/pickup/getPickupActive', 'PickupController@getPickupActive');
 	Route::get('/pickup/getPickupActiveCourier', 'PickupController@getPickupActiveCourier');
 	Route::get('/pickup/getPickupActiveById/{id_pickup}', 'PickupController@getPickupActiveById');
 	Route::get('/pickup/create', 'PickupController@create')->name('createPickup');
 	Route::post('/pickup/storePickup', 'PickupController@storePickup');
-	Route::get('/pickup/acceptPickupJob', 'PickupController@acceptPickupJob')->name('acceptPickupJob');
+	Route::get('/pickup/changePickupJob', 'PickupController@changePickupJob')->name('changePickupJob');
 	Route::get('/pickup/updatedActivity', 'PickupController@updatedActivity');
 
 });

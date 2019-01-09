@@ -22,6 +22,13 @@ class PickupController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+	public function index()
+	{
+		$data['title']			= 'Data Pickup Selesai - PUDEMAS';
+		$data['page']			= 'Data Pickup Selesai';
+
+		return view('pickup/index')->with($data);
+	}
 
 	public function pickupActive()
 	{
@@ -37,6 +44,109 @@ class PickupController extends Controller
 		$data['page']			= 'Data Pickup Active';
 
 		return view('pickup/active_courier')->with($data);
+	}
+
+	public function getPickup()
+	{
+		try {
+
+			$active 	= Pickup::select([
+				'pick_up.id as id_pickup',
+				'users.name as courier_name',
+				'pick_up.type',
+				'pick_up.is_send_to_customer',
+				'pick_up.status',
+				'supplier.name as supplier_name',
+				'item.name as item_name',
+				'pick_up_detail.qty',
+				'pick_up_detail.purchase_price',
+				'pick_up_detail.is_first_row',
+			])
+			->join('pick_up_detail', 'pick_up_detail.pick_up_id', '=', 'pick_up.id')
+			->join('supplier', 'supplier.id', '=', 'pick_up_detail.supplier')
+			->join('item', 'item.id', '=', 'pick_up_detail.item')
+			->join('users', 'users.id', '=', 'pick_up.courier')
+			->where('pick_up.status', '==', '0')
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
+
+			return Datatables::of($active)
+			->editColumn('id_pickup', function ($active) {
+				if ($active->is_first_row == 1) {
+					return $active->id_pickup;
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('status', function ($active) {
+				if ($active->is_first_row == 1) {
+					if ($active->status == 3) {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+						</div><hr>Job Disampaikan Ke Kurir';	
+					}elseif($active->status == 2) {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+						</div><hr>Job diterima Kurir, dan sedang dilakukan pengambilan';	
+					}elseif($active->status == 1) {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+						</div><hr>Kurir selesai mengambil barang di supplier, dan perjalanan kembali ke toko atau ke customer';	
+					}else {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+						</div><hr>Job telah selesai';	
+					}
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('courier_name', function ($active) {
+				if ($active->is_first_row == 1) {
+					return $active->courier_name;
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('type', function ($active) {
+				if ($active->is_first_row == 1) {
+					return $active->type;
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('is_send_to_customer', function ($active) {
+				if ($active->is_first_row == 1) {
+					if ($active->is_send_to_customer == 1) {
+						$is_send 	= 'Ya';
+					}else {
+						$is_send = 'Tidak';
+					}
+					return $is_send;
+				}else {
+					return ' ';
+				}
+			})
+
+			->editColumn('purchase_price', function ($active) {
+				return 'Rp. '.number_format($active->purchase_price);
+			})
+			
+			->addColumn('action', function ($active) {
+				if ($active->is_first_row == 1) {
+					return '
+					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-edit edit"></i></a>
+					<button type="button" id="'.$active->id_pickup.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
+				}else {
+					return ' ';
+				}
+			})
+			->rawColumns(['status', 'action'])
+			->make(true);
+		} catch (\Exception $e) {
+			dd($e->getMessage());
+		}
 	}
 
 	public function getPickupActive()
@@ -410,7 +520,7 @@ class PickupController extends Controller
 				. "Anda telah mendapatkan Job baru untuk melakukan pengambilan barang.\n"
 				. "Silahkan ambil Job berikut dengan mengklik tautan dibawah.\n"
 				. "\n"
-				. "<a href='".url('/pickup/getPickupActiveById/'.$id_pickup)."'>Ambil Job</a>";
+				. "<a href='".url('/pickup/active')."'>Ambil Job</a>";
 
 				$send = Telegram::sendMessage([
 					'chat_id' => env('TELEGRAM_GROUP_TOKEN', 'YOUR-GROUP-TOKEN'),
@@ -478,21 +588,36 @@ class PickupController extends Controller
 	*Utilities Function
 	*
 	*/
-	public function acceptPickupJob(Request $request)
+	public function changePickupJob(Request $request)
 	{
 		try {
 			$user 			= Auth::user();
+			//Jika tidak dikirim langsung
 			if ($request->is_send_to_customer == 0) {
-				$pickup 		= Pickup::find($request->id_pickup);
-				$pickup->status = '2';
-				$pickup->save();
+				//jika job telah selesai
+				if($request->changeTo == 0) {
+					$pickup 		= Pickup::find($request->id_pickup);
+					$pickup->status = $request->changeTo;
+					$pickup->save();
 
-				$courier 			= User::find($user->id);
-				$courier->is_free 	= '0';
-				$courier->save();
+					$courier 			= User::find($user->id);
+					$courier->is_free 	= '1';
+					$courier->save();
+				}else {
+					$pickup 		= Pickup::find($request->id_pickup);
+					$pickup->status = $request->changeTo;
+					$pickup->save();
+
+					$courier 			= User::find($user->id);
+					$courier->is_free 	= '0';
+					$courier->save();
+				}
+
+
+				
 			}
 
-			return back()->with('success', 'Job berhasil diterima');
+			return back()->with('success', 'Job berhasil diupdate');
 			
 		} catch (\Exception $e) {
 			return back()->with('error',$e->getMessage());
