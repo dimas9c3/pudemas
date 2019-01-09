@@ -59,6 +59,7 @@ var datatables = {
             searching : true,
             lengthChange : true,
             info : true,
+            aaSorting : [],
         })
     },
     

@@ -410,13 +410,13 @@ class PickupController extends Controller
 				. "Anda telah mendapatkan Job baru untuk melakukan pengambilan barang.\n"
 				. "Silahkan ambil Job berikut dengan mengklik tautan dibawah.\n"
 				. "\n"
-				. "<a href='".url('/pickup/acceptPickup')."'>Ambil Job</a>";
+				. "<a href='".url('/pickup/getPickupActiveById/'.$id_pickup)."'>Ambil Job</a>";
 
-				/*$send = Telegram::sendMessage([
+				$send = Telegram::sendMessage([
 					'chat_id' => env('TELEGRAM_GROUP_TOKEN', 'YOUR-GROUP-TOKEN'),
 					'parse_mode' => 'HTML',
 					'text' => $text
-				]);*/
+				]);
 
 				return redirect()->route('createPickup')
 				->with('success', 'Data Berhasil Disimpan');
@@ -510,6 +510,4 @@ class PickupController extends Controller
 	 	$activity = Telegram::getUpdates();
 	 	dd($activity);
 	 }
-
-
-	}
+}

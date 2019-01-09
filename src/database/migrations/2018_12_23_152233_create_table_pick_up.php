@@ -19,6 +19,8 @@ class CreateTablePickUp extends Migration
             $table->enum('type', ['cash', 'tempo']);
             $table->integer('is_send_to_customer')->comments('1=Ya, 0=Tidak');
             $table->integer('status')->default('3')->comments('3=Tersimpan, 2=job diambil, 1=barang sudah terambil otw balik, 0=selesai');
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longtitude', 11, 8)->nullable();
             $table->softDeletes();
             $table->timestamps();
 
