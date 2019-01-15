@@ -32,12 +32,26 @@
 				<li id="pickup-link"><a id="pickup-link2" href="#dropdown-pickup" aria-expanded="false" data-toggle="collapse"><i class="la la-cart-arrow-down"></i><span>Transaksi Pengambilan</span></a>
 					<ul id="dropdown-pickup" class="collapse list-unstyled pt-0">
 						@role('Admin|Pimpinan')
-						<li><a id="pickup-active-link" href="{{ route('pickup') }}">Data Pengambilan Selesai</a></li>
+						<li><a id="pickup-index-link" href="{{ route('pickup') }}">Data Pengambilan Selesai</a></li>
 						<li><a id="pickup-active-link" href="{{ route('pickupActive') }}">Data Pengambilan Aktif</a></li>
+						<li><a id="pickup-cancel-link" href="{{ url('pickup/cancel') }}">Data Pengambilan Dibatalkan</a></li>
 						<li><a id="add-pickup-link" href="{{ route('createPickup') }}">Input Pengambilan</a></li>
 						@endrole
 						@role('Kurir')
 						<li><a id="pickup-active-link" href="{{ route('pickupActiveCourier') }}">Data Pengambilan Aktif</a></li>
+						@endrole
+					</ul>
+				</li>
+				<li id="pickup-link"><a id="pickup-link2" href="#dropdown-pickup" aria-expanded="false" data-toggle="collapse"><i class="la la-send"></i><span>Transaksi Pengiriman</span></a>
+					<ul id="dropdown-pickup" class="collapse list-unstyled pt-0">
+						@role('Admin|Pimpinan')
+						<li><a id="pickup-index-link" href="{{ route('pickup') }}">Data Pengiriman Selesai</a></li>
+						<li><a id="pickup-active-link" href="{{ route('pickupActive') }}">Data Pengiriman Aktif</a></li>
+						<li><a id="pickup-cancel-link" href="{{ url('pickup/cancel') }}">Data Pengiriman Dibatalkan</a></li>
+						<li><a id="add-pickup-link" href="{{ route('createPickup') }}">Input Pengiriman</a></li>
+						@endrole
+						@role('Kurir')
+						<li><a id="pickup-active-link" href="{{ route('pickupActiveCourier') }}">Data Pengiriman Aktif</a></li>
 						@endrole
 					</ul>
 				</li>

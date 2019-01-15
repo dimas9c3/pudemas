@@ -643,6 +643,21 @@ class ItemController extends Controller
 	public function destroyItem(Request $request)
 	{
 		try {
+			
+			$Item   = Item::find($request->id);
+			$Item->Delete();
+			return redirect()->route('item')
+			->with('success','Data Berhasil Dihapus');
+		} catch (\Exception $e) {
+			return redirect()->route('item')
+			->with('error',$e->getMessage());
+		}
+
+	}
+
+	public function destroyItemTemporary(Request $request)
+	{
+		try {
 			if ($request->has('image')) {
 				$file_path 		= 'public/images/item/'.$request->image;
 				$thumbnail_path = 'public/images/item/thumbnail/'.$request->image;

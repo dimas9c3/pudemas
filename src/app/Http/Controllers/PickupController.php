@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Pickup;
 use App\PickupDetail;
+use App\Delivery;
+use App\DeliveryDetail;
 use App\Customer;
 use App\Item;
 use App\User;
@@ -46,6 +48,14 @@ class PickupController extends Controller
 		return view('pickup/active_courier')->with($data);
 	}
 
+	public function pickupCancel()
+	{
+		$data['title']			= 'Data Pickup Dibatalkan - PUDEMAS';
+		$data['page']			= 'Data Pickup Dibatalkan';
+
+		return view('pickup/cancel')->with($data);
+	}
+
 	public function getPickup()
 	{
 		try {
@@ -56,6 +66,7 @@ class PickupController extends Controller
 				'pick_up.type',
 				'pick_up.is_send_to_customer',
 				'pick_up.status',
+				'pick_up.created_at as date',
 				'supplier.name as supplier_name',
 				'item.name as item_name',
 				'pick_up_detail.qty',
@@ -75,6 +86,13 @@ class PickupController extends Controller
 			->editColumn('id_pickup', function ($active) {
 				if ($active->is_first_row == 1) {
 					return $active->id_pickup;
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('date', function ($active) {
+				if ($active->is_first_row == 1) {
+					return Carbon::createFromFormat('Y-m-d H:i:s', $active->date)->format('d-m-Y');
 				}else {
 					return ' ';
 				}
@@ -136,8 +154,7 @@ class PickupController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-edit edit"></i></a>
-					<button type="button" id="'.$active->id_pickup.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
+					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
 				}else {
 					return ' ';
 				}
@@ -155,6 +172,7 @@ class PickupController extends Controller
 
 			$active 	= Pickup::select([
 				'pick_up.id as id_pickup',
+				'pick_up.courier as id_courier',
 				'users.name as courier_name',
 				'pick_up.type',
 				'pick_up.is_send_to_customer',
@@ -239,8 +257,8 @@ class PickupController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-edit edit"></i></a>
-					<button type="button" id="'.$active->id_pickup.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
+					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>
+					<a href="'.route('cancelPickup', ['id_pickup' => $active->id_pickup, 'id_courier' => $active->id_courier, 'is_send_to_customer' => $active->is_send_to_customer]).'" class="btn btn-danger btn-sm mr-1 mb-2"><i class="la la-close cancel"></i></a>';
 				}else {
 					return ' ';
 				}
@@ -344,8 +362,123 @@ class PickupController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-edit edit"></i></a>
-					<button type="button" id="'.$active->id_pickup.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
+					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
+				}else {
+					return ' ';
+				}
+			})
+			->rawColumns(['status', 'action'])
+			->make(true);
+		} catch (\Exception $e) {
+			dd($e->getMessage());
+		}
+	}
+
+	public function getPickupCancel()
+	{
+		try {
+
+			$active 	= Pickup::select([
+				'pick_up.id as id_pickup',
+				'pick_up.courier as id_courier',
+				'users.name as courier_name',
+				'pick_up.type',
+				'pick_up.is_send_to_customer',
+				'pick_up.status',
+				'pick_up.deleted_at as cancel',
+				'pick_up.created_at as date',
+				'supplier.name as supplier_name',
+				'item.name as item_name',
+				'pick_up_detail.qty',
+				'pick_up_detail.purchase_price',
+				'pick_up_detail.is_first_row',
+			])
+			->join('pick_up_detail', 'pick_up_detail.pick_up_id', '=', 'pick_up.id')
+			->join('supplier', 'supplier.id', '=', 'pick_up_detail.supplier')
+			->join('item', 'item.id', '=', 'pick_up_detail.item')
+			->join('users', 'users.id', '=', 'pick_up.courier')
+			->onlyTrashed()
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
+
+			return Datatables::of($active)
+			->editColumn('id_pickup', function ($active) {
+				if ($active->is_first_row == 1) {
+					return $active->id_pickup;
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('date', function ($active) {
+				if ($active->is_first_row == 1) {
+					return Carbon::createFromFormat('Y-m-d H:i:s', $active->date)->format('d-m-Y');
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('status', function ($active) {
+				if ($active->is_first_row == 1) {
+					if ($active->cancel != NULL) {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Cancel</div>
+						</div><hr>Job Dibatalkan';	
+					}elseif ($active->status == 3) {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+						</div><hr>Job Disampaikan Ke Kurir';	
+					}elseif($active->status == 2) {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+						</div><hr>Job diterima Kurir, dan sedang dilakukan pengambilan';	
+					}elseif($active->status == 1) {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+						</div><hr>Kurir selesai mengambil barang di supplier, dan perjalanan kembali ke toko atau ke customer';	
+					}else {
+						return '<div class="progress progress-lg mb-3">
+						<div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+						</div><hr>Job telah selesai';	
+					}
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('courier_name', function ($active) {
+				if ($active->is_first_row == 1) {
+					return $active->courier_name;
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('type', function ($active) {
+				if ($active->is_first_row == 1) {
+					return $active->type;
+				}else {
+					return ' ';
+				}
+			})
+			->editColumn('is_send_to_customer', function ($active) {
+				if ($active->is_first_row == 1) {
+					if ($active->is_send_to_customer == 1) {
+						$is_send 	= 'Ya';
+					}else {
+						$is_send = 'Tidak';
+					}
+					return $is_send;
+				}else {
+					return ' ';
+				}
+			})
+
+			->editColumn('purchase_price', function ($active) {
+				return 'Rp. '.number_format($active->purchase_price);
+			})
+			
+			->addColumn('action', function ($active) {
+				if ($active->is_first_row == 1) {
+					return '
+					<a href="'.route('recyclePickup', ['id_pickup' => $active->id_pickup, 'id_courier' => $active->id_courier, 'is_send_to_customer' => $active->is_send_to_customer]).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-recycle"></i></a>';
 				}else {
 					return ' ';
 				}
@@ -366,6 +499,7 @@ class PickupController extends Controller
 				'pick_up.type',
 				'pick_up.is_send_to_customer',
 				'pick_up.status',
+				'pick_up.deleted_at as cancel',
 				'supplier.name as supplier_name',
 				'item.name as item_name',
 				'pick_up_detail.qty',
@@ -389,7 +523,11 @@ class PickupController extends Controller
 			}
 
 			//determine status 
-			if ($pickup[0]->status == '3') {
+			if ($pickup[0]->cancel != NULL) {
+				$status 		= '<div class="progress progress-lg mb-3">
+				<div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Cancel</div>
+				</div><hr>Job telah dibatalkan';
+			} elseif ($pickup[0]->status == '3') {
 				$status 		= '<div class="progress progress-lg mb-3">
 				<div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
 				</div><hr>Job Disampaikan Ke Kurir';
@@ -530,6 +668,113 @@ class PickupController extends Controller
 
 				return redirect()->route('createPickup')
 				->with('success', 'Data Berhasil Disimpan');
+
+			// Jika dikirim langsung ke customer
+			}elseif($is_send == '1') {
+				// Jika data item dikirim kosong
+				if (empty(session('item-delivery'))) {
+					return redirect()->route('createPickup')
+					->with('error', 'Data Item Yang Dikirim Kosong, Silahkan Isi Terlebih Dulu Lalu Submit Data Sekali Lagi.');
+				}
+
+				$attributeNames 		= array(
+					'courier'				=> 'Kurir',
+					'type'					=> 'Type Pembelian',
+					'customer'				=> 'Customer',
+					'send_cost'				=> 'Ongkos Pengiriman',
+				);
+
+				$validator 				= Validator::make($request->all(), [
+					'courier'				=> 'required',
+					'customer'				=> 'required',
+					'type'					=> 'required',
+				]);
+
+				$validator->setAttributeNames($attributeNames);
+
+				if ($validator->fails()) {
+					return redirect()->route('createPickup')
+					->withErrors($validator)
+					->withInput();
+				}
+
+				// Save Pickup
+				$pickup 						= new Pickup();
+				$pickup->id 					= $id_pickup;
+				$pickup->courier 				= $id_courier;
+				$pickup->type 					= $request->type;
+				$pickup->is_send_to_customer	= $is_send;
+				$pickup->save();
+
+				// Save Detail Pickup
+				$row_identifier = 0;
+				foreach (session('item-pickup') as $i) {
+					if ($row_identifier == 0) {
+						$row 			= 1;
+					}else {
+						$row 			= 0;
+					}
+
+					$detail 					= new PickupDetail();
+					$detail->pick_up_id 		= $id_pickup;
+					$detail->supplier 			= $i['id_supplier'];
+					$detail->item 				= $i['id_item'];
+					$detail->qty 				= $i['qty'];
+					$detail->purchase_price 	= $i['purchase_price'];
+					$detail->is_first_row 		= $row;
+					$detail->save();
+					$row_identifier 			= 1;
+				}
+
+				// Save Delivery
+				$delivery 						= new Delivery();
+				$delivery->id 					= $id_pickup;
+				$delivery->customer 			= $request->customer;
+				$delivery->courier 				= $id_courier;
+				$delivery->is_pickup_first 		= $is_send;
+				$delivery->send_cost 			= $request->send_cost;
+				$delivery->save();
+
+				// Save Detail delivery
+				$row_identifier = 0;
+				foreach (session('item-delivery') as $i) {
+					if ($row_identifier == 0) {
+						$row 			= 1;
+					}else {
+						$row 			= 0;
+					}
+
+					$detail 					= new DeliveryDetail();
+					$detail->delivery_id 		= $id_pickup;
+					$detail->item 				= $i['id_item'];
+					$detail->qty 				= $i['qty'];
+					$detail->selling_price 		= $i['selling_price'];
+					$detail->is_first_row 		= $row;
+					$detail->save();
+					$row_identifier 			= 1;
+				}
+
+				// Hapus session item pickup
+				$request->session()->forget('item-pickup');
+				$request->session()->forget('item-delivery');
+
+				// Send Telegram Message
+				$text = "<code>Job Baru Pengambilan Barang</code>\n"
+				. "\n"
+				. "Hello Kurir,<b> ".$nm_courier.". </b>\n"
+				. "Anda telah mendapatkan Job baru untuk melakukan pengambilan barang.\n"
+				. "Silahkan ambil Job berikut dengan mengklik tautan dibawah.\n"
+				. "\n"
+				. "<a href='".url('/pickup/active')."'>Ambil Job</a>";
+
+				$send = Telegram::sendMessage([
+					'chat_id' => env('TELEGRAM_GROUP_TOKEN', 'YOUR-GROUP-TOKEN'),
+					'parse_mode' => 'HTML',
+					'text' => $text
+				]);
+
+				return redirect()->route('createPickup')
+				->with('success', 'Data Berhasil Disimpan');
 			}
 			
 		} catch (\Exception $e) {
@@ -624,6 +869,50 @@ class PickupController extends Controller
 		}
 	}
 
+	public function cancelPickup(Request $request)
+	{
+		try {
+			if ($request->is_send_to_customer == 0) {
+				$pickup 		= Pickup::where('id', $request->id_pickup);
+				$pickup->Delete();
+
+				$detail 		= PickupDetail::where('pick_up_id', $request->id_pickup);
+				$detail->delete();
+
+				$courier 			= User::find($request->id_courier);
+				$courier->is_free 	= '1';
+				$courier->save();
+				
+			}
+
+			return back()->with('success', 'Job berhasil dibatalkan');
+		} catch (\Exception $e) {
+			return back()->with('error', $e->getMessage());
+		}
+	}
+
+	public function recyclePickup(Request $request)
+	{
+		try {
+			if ($request->is_send_to_customer == 0) {
+				$pickup 		= Pickup::where('id', $request->id_pickup);
+				$pickup->restore();
+
+				$detail 		= PickupDetail::where('pick_up_id', $request->id_pickup);
+				$detail->restore();
+
+				$courier 			= User::find($request->id_courier);
+				$courier->is_free 	= '0';
+				$courier->save();
+				
+			}
+
+			return back()->with('success', 'Job berhasil diupdate');
+		} catch (\Exception $e) {
+			return back()->with('error', $e->getMessage());
+		}
+	}
+
 	 /**
 	 * Telegram Function
 	 *
@@ -635,4 +924,4 @@ class PickupController extends Controller
 	 	$activity = Telegram::getUpdates();
 	 	dd($activity);
 	 }
-}
+	}

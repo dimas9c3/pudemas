@@ -37,7 +37,6 @@ return array(
     'App\\ItemCategory2' => $baseDir . '/app/ItemCategory2.php',
     'App\\Pickup' => $baseDir . '/app/Pickup.php',
     'App\\PickupDetail' => $baseDir . '/app/PickupDetail.php',
-    'App\\Product' => $baseDir . '/app/Product.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',

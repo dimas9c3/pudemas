@@ -19,8 +19,7 @@ class CreateTableSupplier extends Migration
             $table->string('email', 65)->nullable();
             $table->string('phone', 13)->nullable();
             $table->text('address')->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longtitude', 11, 8)->nullable();
+            $table->text('location')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

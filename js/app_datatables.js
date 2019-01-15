@@ -125,6 +125,7 @@ var datatables = {
             ajax : getPickup,
             columns : [
             {data: 'id_pickup'},
+            {data: 'date'},
             {data: 'status'},
             {data: 'courier_name'},
             {data: 'type'},
@@ -151,6 +152,33 @@ var datatables = {
             ajax : getPickupActive,
             columns : [
             {data: 'id_pickup'},
+            {data: 'status'},
+            {data: 'courier_name'},
+            {data: 'type'},
+            {data: 'is_send_to_customer'},
+            {data: 'item_name'},
+            {data: 'supplier_name'},
+            {data: 'qty'},
+            {data: 'purchase_price'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            paging : true,
+            searching : true,
+            lengthChange : true,
+            info : true,
+            aaSorting : [],
+        })
+    },
+
+     // Table Pickup cancel
+    table_pickup_cancel : function() {
+        $('#table-pickup-cancel').DataTable({
+            processing : true,
+            serverSide : true,
+            ajax : getPickupCancel,
+            columns : [
+            {data: 'id_pickup'},
+            {data: 'date'},
             {data: 'status'},
             {data: 'courier_name'},
             {data: 'type'},

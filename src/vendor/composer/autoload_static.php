@@ -551,7 +551,6 @@ class ComposerStaticInit36389bb03250e700dd3d06a070bd53e3
         'App\\ItemCategory2' => __DIR__ . '/../..' . '/app/ItemCategory2.php',
         'App\\Pickup' => __DIR__ . '/../..' . '/app/Pickup.php',
         'App\\PickupDetail' => __DIR__ . '/../..' . '/app/PickupDetail.php',
-        'App\\Product' => __DIR__ . '/../..' . '/app/Product.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',

@@ -389,12 +389,9 @@ var event = {
 							'<div class="col-lg-4">'+
 								'<select name="customer" class="form-control select-customer" required></select>'+
 							'</div>'+
-							'<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Alamat Pengiriman</label>'+
+							'<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Ongkos Pengiriman</label>'+
 							'<div class="col-lg-4">'+
-								'<textarea class="form-control input-alamat" rows="5" placeholder="Type your message here ..." required></textarea>'+
-								'<div class="invalid-feedback">'+
-									'Please enter a custom message'+
-								'</div>'+
+								'<input type="number" name="send_cost" id="send_cost" class="form-control">'+
 							'</div>'+
 						'</div>';
 

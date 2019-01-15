@@ -66,7 +66,7 @@
 				</div>
 				<div class="widget-body">
 					<div class="table-responsive">
-						<table id="table-pickup-active" class="table mb-0 table-striped">
+						<table id="table-pickup-cancel" class="table mb-0 table-striped">
 							<thead>
 								<tr>
 									<th>ID PICKUP</th>
@@ -173,7 +173,7 @@
 @endsection
 @section('js-route')
 <script>
-	var getPickup 		 	= '{{ url('pickup/getPickup') }}';
+	var getPickupCancel  	= '{{ url('pickup/getPickupCancel') }}';
 	var getPickupActiveById = '{{ url('pickup/getPickupActiveById') }}';
 	var token 				= '{{ csrf_token() }}';
 </script>
@@ -184,8 +184,8 @@
 		document.getElementById("pickup-link").classList.add('active');
 		document.getElementById("pickup-link2").setAttribute('aria-expanded','TRUE');
 		document.getElementById("dropdown-pickup").classList.add('show');
-		document.getElementById("pickup-index-link").classList.add('active');
-		datatables.table_pickup();
+		document.getElementById("pickup-cancel-link").classList.add('active');
+		datatables.table_pickup_cancel();
 	});
 </script>
 @endsection

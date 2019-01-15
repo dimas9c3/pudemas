@@ -134,7 +134,7 @@
 							</tbody>
 						</table>
 					</div>
-					@if($pickup[0]->status != 3)
+					@if($pickup[0]->status != 3 AND $pickup[0]->status != 0)
 					<hr>
 					<h4>Lokasi Realtime Kurir</h4>
 					<div class="courier-location" id="map-courier-detail"></div>
@@ -163,7 +163,7 @@
 		document.getElementById("pickup-link2").setAttribute('aria-expanded','TRUE');
 		document.getElementById("dropdown-pickup").classList.add('show');
 
-		@if($pickup[0]->status != '3')
+		@if($pickup[0]->status != '3' AND $pickup[0]->status != '0')
 		
 		var map = L.map('map-courier-detail');
 
@@ -214,7 +214,7 @@
 	});
 
 	@elseif($pickup[0]->status == 0)
-	console.log('Job Selesai')
+	console.log('Job Telah Selesai')
 	@endif
 });
 </script>
