@@ -458,6 +458,18 @@ class PickupController extends Controller
 			dd($e->getMessage());
 		}
 	}
+	
+	public function getPickupLocation(Request $request)
+	{
+	    $pickup             = Pickup::select([
+	        'latitude',    
+	        'longtitude'
+	    ])
+	    ->where('id', $request->id)
+	    ->get();
+	    
+	    return response()->json($pickup);
+	}
 
 	/**
 	 * Show the form for creating a new resource.
@@ -695,7 +707,8 @@ class PickupController extends Controller
 	{
 		try {
 			$pickup 			= Pickup::find($request->id);
-			$pickup->location 	= $request->location;
+			$pickup->latitude 	= $request->latitude;
+			$pickup->longtitude = $request->longtitude;
 			$ajax 				= $pickup->save();
 
 			return response()->json($ajax);

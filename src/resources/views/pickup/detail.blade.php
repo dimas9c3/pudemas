@@ -152,7 +152,9 @@
 @endsection
 @section('js-route')
 <script>
-	var id_pickup 			= '{{ $pickup[0]->id }}';
+	var id_pickup 			= '{{ $pickup[0]->id_pickup }}';
+	var lat_start           = '-7.5308914';
+	var lng_start           = '110.73142';
 	var getPickupActiveById = '{{ url('pickup/getPickupActiveById') }}';
 	var token 				= '{{ csrf_token() }}';
 </script>
@@ -191,7 +193,7 @@
 	  		url 			: '{{ url('pickup/storeLocation') }}',
 	  		type 			: 'POST',
 	  		dataType 		: 'JSON',
-	  		data 			: {_token: token, id: id_pickup, location: e.latlng.lat + ", " + e.latlng.lng},
+	  		data 			: {_token: token, id: id_pickup, latitude: e.latlng.lat, longtitude:e.latlng.lng},
 	  		success 		: function(data) {
 	  			console.log('Location data successfully stored');
 	  		},
@@ -229,6 +231,39 @@
 	map.on('click', function(e) {
 		alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
 	});
+
+	@endrole
+	@role('Pimpinan|Admin')
+	
+	var mymap = L.map('map-courier-detail').setView([JSON.parse(lat_start), JSON.parse(lng_start)], 13);
+
+		        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        			maxZoom: 18,
+        			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        			id: 'mapbox.streets'
+        		}).addTo(mymap);
+	
+	function locate() {
+	    $.ajax({
+	        url         : '{{ url('pickup/getPickupLocation') }}',
+	        type        : 'POST',
+	        dataType    : 'JSON',
+	        data        : {_token:token, id: '{{ $pickup[0]->id_pickup }}' },
+	        success     : function(data) {
+	            console.log('Updated Successfully');
+	            
+	            mymap.panTo([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)], 13);
+                
+                var newMark = new L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
+
+	        }
+	    });
+	}
+	
+	// call locate every .. seconds... forever
+	setInterval(locate, 5000);
 
 	@endrole
 	@elseif($pickup[0]->status == 0)

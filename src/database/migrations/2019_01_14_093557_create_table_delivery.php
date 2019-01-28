@@ -22,7 +22,8 @@ class CreateTableDelivery extends Migration
             $table->integer('send_cost')->default('0')->nullable();
             $table->integer('is_pickup_first')->comments('1=Ya, 0=Tidak');
             $table->integer('status')->default('4')->comments('4=Tersimpan, 3=job diambil, 2=barang sudah terambil otw balik, 1=otw ke customer, 0=selesai');
-            $table->text('location')->nullable();
+            $table->text('latitude')->nullable();
+            $table->text('longtitude')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

@@ -96,6 +96,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'pickup-route']], function() {
 	Route::get('/pickup/getPickupActiveCourier', 'PickupController@getPickupActiveCourier');
 	Route::get('/pickup/getPickupCancel', 'PickupController@getPickupCancel')->name('getPickupCancel');
 	Route::get('/pickup/getPickupActiveById/{id_pickup}', 'PickupController@getPickupActiveById');
+	Route::post('/pickup/getPickupLocation', 'PickupController@getPickupLocation');
 	Route::get('/pickup/create', 'PickupController@create')->name('createPickup');
 	Route::post('/pickup/storePickup', 'PickupController@storePickup');
 	Route::post('/pickup/storeLocation', 'PickupController@storeLocation');

@@ -27,7 +27,8 @@ class CreateMasterCustomer extends Migration
             $table->string('email', 45)->nullable();
             $table->string('phone', 13)->nullable();
             $table->text('address')->nullable();
-            $table->text('location')->nullable();
+            $table->text('latitude')->nullable();
+            $table->text('longtitude')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
