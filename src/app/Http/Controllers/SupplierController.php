@@ -32,18 +32,7 @@ class SupplierController extends Controller
     public function getSupplier()
     {
         try {
-            DB::statement(DB::raw('set @rownum=0'));
-
-            $Supplier = Supplier::select([
-                DB::raw('@rownum  := @rownum  + 1 AS rownum'),
-                'id',
-                'name',
-                'email',
-                'phone',
-                'address',
-            ])
-            ->orderBy('name','asc')
-            ->get();
+            $Supplier       = Supplier::Supplier();
 
             return Datatables::of($Supplier)
             ->addColumn('action', function ($Supplier) {

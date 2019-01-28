@@ -22,9 +22,9 @@ class ItemController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	function __construct()
-    {
-         $this->middleware('permission:master-items');
-    }
+	{
+		$this->middleware('permission:master-items');
+	}
 
 	public function index()
 	{
@@ -36,22 +36,7 @@ class ItemController extends Controller
 	public function getItem()
 	{
 		try {
-			DB::statement(DB::raw('set @rownum=0'));
-
-			$Item = Item::select([
-				DB::raw('@rownum  := @rownum  + 1 AS rownum'),
-				'item.id',
-				'item.image',
-				'item.name',
-				'item.purchase_price',
-				'item.selling_price',
-				'item_category1.name as kategori',
-				'item_category2.name as merk',
-			])
-			->join('item_category1','item_category1.id','=','item.item_category1')
-			->join('item_category2','item_category2.id','=','item.item_category2')
-			->orderBy('item.name','asc')
-			->get();
+			$Item 			= Item::Item()->get();
 
 			return Datatables::of($Item)
 			->addColumn('foto', function ($Item) {
@@ -399,6 +384,31 @@ class ItemController extends Controller
 				$request->session()->push('item-pickup', $session);
 			}
 			
+
+			return response()->json($request);
+		} catch (\Exception $e) {
+			return response()->json($e->getMessage());
+		}
+		
+	}
+
+	public function storeItemDelivery(Request $request)
+	{
+		try {
+			// Fetch Item data
+			$item 			= Item::find($request->id);
+			$id_item		= $item->id;
+			$nm_item 		= $item->name;
+
+			$delivery 		= array(
+				'id_item'			=> $id_item,
+				'nm_item'			=> $nm_item,
+				'qty'				=> $request->qty,
+				'selling_price'		=> $request->selling_price,
+
+			);
+
+			$request->session()->push('item-delivery', $delivery);			
 
 			return response()->json($request);
 		} catch (\Exception $e) {

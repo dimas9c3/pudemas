@@ -61,21 +61,21 @@
 			<!-- Begin Supplier -->
 			<div class="widget has-shadow">
 				<div class="widget-header bordered no-actions d-flex align-items-center">
-					<h4>Tabel Data Pengambilan</h4>
+					<h4>Tabel Data Pengiriman</h4>
 
 				</div>
 				<div class="widget-body">
 					<div class="table-responsive">
-						<table id="table-pickup-active" class="table mb-0 table-striped">
+						<table id="table-delivery-active" class="table mb-0 table-striped">
 							<thead>
 								<tr>
-									<th>ID PICKUP</th>
+									<th>ID Pengiriman</th>
 									<th>Status</th>
+									<th>Customer</th>
 									<th>Kurir</th>
-									<th>Jenis</th>
-									<th>Langsung Dikirim Ke Customer</th>
+									<th>Dilakukan Pengambilan Ke Supplier</th>
+									<th>Ongkir</th>
 									<th>Item</th>
-									<th>Supplier</th>
 									<th>Qty</th>
 									<th>Harga</th>
 									<th>Aksi</th>
@@ -97,19 +97,18 @@
 @endsection
 @section('js-route')
 <script>
-	var getPickupActive 	= '{{ url('pickup/getPickupActive') }}';
-	var getPickupActiveById = '{{ url('pickup/getPickupActiveById') }}';
+	var getDeliveryActive 	= '{{ url('delivery/getDeliveryActive') }}';
 	var token 				= '{{ csrf_token() }}';
 </script>
 @endsection
 @section('js')
 <script>
 	$(document).ready(function() {
-		document.getElementById("pickup-link").classList.add('active');
-		document.getElementById("pickup-link2").setAttribute('aria-expanded','TRUE');
-		document.getElementById("dropdown-pickup").classList.add('show');
-		document.getElementById("pickup-active-link").classList.add('active');
-		datatables.table_pickup_active();
+		document.getElementById("delivery-link").classList.add('active');
+		document.getElementById("delivery-link2").setAttribute('aria-expanded','TRUE');
+		document.getElementById("dropdown-delivery").classList.add('show');
+		document.getElementById("delivery-active-link").classList.add('active');
+		datatables.table_delivery_active();
 	});
 </script>
 @endsection

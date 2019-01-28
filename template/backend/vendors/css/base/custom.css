@@ -34,3 +34,9 @@ tbody {
 	width: 100%;
 }
 
+@media (max-width: 480px) {
+	.input-group-addon {
+		padding: 0.2rem!important;
+	}
+}
+

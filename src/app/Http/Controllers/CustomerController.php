@@ -16,95 +16,85 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $CustomerModel;
+
     function __construct()
     {
-         $this->middleware('permission:master-customers');
+       $this->middleware('permission:master-customers');
+       $this->CustomerModel        = new Customer();
+   }
+
+   public function index()
+   {
+    $data['title']          = 'Data Customer - PUDEMAS';
+    $data['page']           = 'Data Customer';
+    return view('customer')->with($data);
+}
+
+public function getCustomer()
+{
+    try {
+        $customer           = $this->CustomerModel->getCustomer();
+        
+        return Datatables::of($customer)
+        ->addColumn('action', function ($customer) {
+            return '
+            <button type="button" id="'.$customer->id.'" class="btn btn-info btn-sm mr-1 mb-2 button-update"><i class="la la-edit edit"></i></button>
+            <button type="button" id="'.$customer->id.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
+        })
+        ->make(true);
+    } catch (\Exception $e) {
+       dd($e->getMessage());
+   }  
+}
+
+public function getCustomerById(Request $request)
+{
+    try {
+        $customer           = Customer::select([
+            'customer.id',
+            'customer.name',
+            'customer_type.id as type_id',
+            'customer_type.name as type',
+            'customer.email',
+            'customer.phone',
+            'customer.address'
+        ])
+        ->join('customer_type', 'customer_type.id', '=', 'customer.customer_type')
+        ->where('customer.id', $request->id)
+        ->get();
+
+        return response()->json($customer);
+    } catch (\Exception $e) {
+        dd($e->getMessage());
     }
 
-    public function index()
-    {
-        $data['title']          = 'Data Customer - PUDEMAS';
-        $data['page']           = 'Data Customer';
-        return view('customer')->with($data);
-    }
+}
 
-    public function getCustomer()
-    {
-        try {
-            DB::statement(DB::raw('set @rownum=0'));
- 
-            $customer = Customer::select([
-                DB::raw('@rownum  := @rownum  + 1 AS rownum'),
-                'customer.id',
-                'customer.name',
-                'customer_type.name as type',
-                'customer.email',
-                'customer.phone',
-                'customer.address'
-            ])
-            ->join('customer_type', 'customer_type.id', '=', 'customer.customer_type')
-            ->orderBy('customer.name','asc')
-            ->get();
- 
-            return Datatables::of($customer)
-            ->addColumn('action', function ($customer) {
-                return '
-                <button type="button" id="'.$customer->id.'" class="btn btn-info btn-sm mr-1 mb-2 button-update"><i class="la la-edit edit"></i></button>
-                <button type="button" id="'.$customer->id.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
-            })
-            ->make(true);
-          } catch (\Exception $e) {
-             dd($e->getMessage());
-          }  
-    }
+public function getCustomerType()
+{
+    try {
+        DB::statement(DB::raw('set @rownum=0'));
 
-    public function getCustomerById(Request $request)
-    {
-        try {
-            $customer           = Customer::select([
-                'customer.id',
-                'customer.name',
-                'customer_type.id as type_id',
-                'customer_type.name as type',
-                'customer.email',
-                'customer.phone',
-                'customer.address'
-            ])
-            ->join('customer_type', 'customer_type.id', '=', 'customer.customer_type')
-            ->where('customer.id', $request->id)
-            ->get();
+        $customerType   = CustomerType::select([
+            DB::raw('@rownum  := @rownum  + 1 AS rownum'),
+            'id',
+            'name',
+        ])
+        ->orderBy('name','asc')
+        ->get();
 
-            return response()->json($customer);
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-
-    }
-
-    public function getCustomerType()
-    {
-        try {
-            DB::statement(DB::raw('set @rownum=0'));
-
-            $customerType   = CustomerType::select([
-                DB::raw('@rownum  := @rownum  + 1 AS rownum'),
-                'id',
-                'name',
-            ])
-            ->orderBy('name','asc')
-            ->get();
-
-            return Datatables::of($customerType)
-            ->addColumn('action', function ($customerType) {
-                return '
-                <button type="button" id="'.$customerType->id.'" name="'.$customerType->name.'" class="btn btn-info btn-sm mr-1 mb-2 button-update"><i class="la la-edit edit"></i></button>
-                <button type="button" id="'.$customerType->id.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
-            })
-            ->make(true);
-          } catch (\Exception $e) {
-                dd($e->getMessage());
-          }  
-    }
+        return Datatables::of($customerType)
+        ->addColumn('action', function ($customerType) {
+            return '
+            <button type="button" id="'.$customerType->id.'" name="'.$customerType->name.'" class="btn btn-info btn-sm mr-1 mb-2 button-update"><i class="la la-edit edit"></i></button>
+            <button type="button" id="'.$customerType->id.'" class="btn btn-danger btn-sm mr-1 mb-2 button-destroy"><i class="la la-close delete"></i></button>';
+        })
+        ->make(true);
+    } catch (\Exception $e) {
+        dd($e->getMessage());
+    }  
+}
 
     /**
      * Store a newly created resource in storage.
@@ -125,7 +115,7 @@ class CustomerController extends Controller
             ]);
 
             if ($validator->fails()) {
-            return redirect()->route('customer')
+                return redirect()->route('customer')
                 ->withErrors($validator)
                 ->withInput();
             }
@@ -155,7 +145,7 @@ class CustomerController extends Controller
             ]);
 
             if ($validator->fails()) {
-            return redirect()->route('customer')
+                return redirect()->route('customer')
                 ->withErrors($validator)
                 ->withInput();
             }
@@ -193,7 +183,7 @@ class CustomerController extends Controller
             ]);
 
             if ($validator->fails()) {
-            return redirect()->route('customer')
+                return redirect()->route('customer')
                 ->withErrors($validator)
                 ->withInput();
             }
@@ -217,27 +207,27 @@ class CustomerController extends Controller
     public function updateCustomerType(Request $request)
     {
         try {
-             $validator = Validator::make($request->all(),[
-                'name' => 'required|min:4',
-            ]);
+           $validator = Validator::make($request->all(),[
+            'name' => 'required|min:4',
+        ]);
 
-            if ($validator->fails()) {
+           if ($validator->fails()) {
             return redirect()->route('customer')
-                ->withErrors($validator)
-                ->withInput();
-            }
-
-            $crud               = CustomerType::find($request->id);
-            $crud->name         = $request->name;
-            $crud->save();
-
-            return redirect()->route('customer')
-            ->with('success','Data Berhasil Diubah');
-        } catch (\Exception $e) {
-            return redirect()->route('customer')
-            ->with('error',$e->getMessage());
+            ->withErrors($validator)
+            ->withInput();
         }
+
+        $crud               = CustomerType::find($request->id);
+        $crud->name         = $request->name;
+        $crud->save();
+
+        return redirect()->route('customer')
+        ->with('success','Data Berhasil Diubah');
+    } catch (\Exception $e) {
+        return redirect()->route('customer')
+        ->with('error',$e->getMessage());
     }
+}
 
     /**
      * Remove the specified resource from storage.

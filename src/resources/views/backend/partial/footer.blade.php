@@ -5,14 +5,6 @@
 			<p class="text-gradient-02">Copyright &copy; iamhermawan.com 2018</p>
 		</div>
 		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-center">
-			<ul class="nav">
-				<li class="nav-item">
-					<a class="nav-link" href="documentation.html">Documentation</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="changelog.html">Changelog</a>
-				</li>
-			</ul>
 		</div>
 	</div>
 </footer>
@@ -38,6 +30,8 @@
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
 <!-- Leaflet -->
 <script src="{{ asset('plugins/leaflet/leaflet.js') }}"></script>
+<!-- Datepicker -->
+<script src="{{ asset('plugins/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 <!-- End Page Vendor Js -->
 <!-- Begin Page Snippets -->
 <!-- APP Master -->

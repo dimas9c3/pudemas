@@ -24,6 +24,13 @@ class PickupController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+	protected $PickupModel;
+
+	function __construct()
+	{
+		$this->PickupModel 			= new Pickup();
+	}
+
 	public function index()
 	{
 		$data['title']			= 'Data Pickup Selesai - PUDEMAS';
@@ -60,27 +67,7 @@ class PickupController extends Controller
 	{
 		try {
 
-			$active 	= Pickup::select([
-				'pick_up.id as id_pickup',
-				'users.name as courier_name',
-				'pick_up.type',
-				'pick_up.is_send_to_customer',
-				'pick_up.status',
-				'pick_up.created_at as date',
-				'supplier.name as supplier_name',
-				'item.name as item_name',
-				'pick_up_detail.qty',
-				'pick_up_detail.purchase_price',
-				'pick_up_detail.is_first_row',
-			])
-			->join('pick_up_detail', 'pick_up_detail.pick_up_id', '=', 'pick_up.id')
-			->join('supplier', 'supplier.id', '=', 'pick_up_detail.supplier')
-			->join('item', 'item.id', '=', 'pick_up_detail.item')
-			->join('users', 'users.id', '=', 'pick_up.courier')
-			->where('pick_up.status', '==', '0')
-			->orderBy('pick_up.created_at', 'DESC')
-			->orderBy('pick_up_detail.is_first_row', 'DESC')
-			->get();
+			$active 			= $this->PickupModel->getPickup();
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -146,11 +133,9 @@ class PickupController extends Controller
 					return ' ';
 				}
 			})
-
 			->editColumn('purchase_price', function ($active) {
 				return 'Rp. '.number_format($active->purchase_price);
 			})
-			
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
@@ -170,27 +155,7 @@ class PickupController extends Controller
 	{
 		try {
 
-			$active 	= Pickup::select([
-				'pick_up.id as id_pickup',
-				'pick_up.courier as id_courier',
-				'users.name as courier_name',
-				'pick_up.type',
-				'pick_up.is_send_to_customer',
-				'pick_up.status',
-				'supplier.name as supplier_name',
-				'item.name as item_name',
-				'pick_up_detail.qty',
-				'pick_up_detail.purchase_price',
-				'pick_up_detail.is_first_row',
-			])
-			->join('pick_up_detail', 'pick_up_detail.pick_up_id', '=', 'pick_up.id')
-			->join('supplier', 'supplier.id', '=', 'pick_up_detail.supplier')
-			->join('item', 'item.id', '=', 'pick_up_detail.item')
-			->join('users', 'users.id', '=', 'pick_up.courier')
-			->where('pick_up.status', '!=', '0')
-			->orderBy('pick_up.created_at', 'DESC')
-			->orderBy('pick_up_detail.is_first_row', 'DESC')
-			->get();
+			$active 			= $this->PickupModel->getPickupActive();
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -249,11 +214,9 @@ class PickupController extends Controller
 					return ' ';
 				}
 			})
-
 			->editColumn('purchase_price', function ($active) {
 				return 'Rp. '.number_format($active->purchase_price);
 			})
-			
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
@@ -275,27 +238,7 @@ class PickupController extends Controller
 		$user                   = Auth::user();
 		try {
 
-			$active 	= Pickup::select([
-				'pick_up.id as id_pickup',
-				'users.name as courier_name',
-				'pick_up.type',
-				'pick_up.is_send_to_customer',
-				'pick_up.status',
-				'supplier.name as supplier_name',
-				'item.name as item_name',
-				'pick_up_detail.qty',
-				'pick_up_detail.purchase_price',
-				'pick_up_detail.is_first_row',
-			])
-			->join('pick_up_detail', 'pick_up_detail.pick_up_id', '=', 'pick_up.id')
-			->join('supplier', 'supplier.id', '=', 'pick_up_detail.supplier')
-			->join('item', 'item.id', '=', 'pick_up_detail.item')
-			->join('users', 'users.id', '=', 'pick_up.courier')
-			->where('pick_up.courier', $user->id)
-			->where('pick_up.status', '!=', '0')
-			->orderBy('pick_up.created_at', 'DESC')
-			->orderBy('pick_up_detail.is_first_row', 'DESC')
-			->get();
+			$active 			= $this->PickupModel->getPickupActiveCourier($user);
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -354,11 +297,9 @@ class PickupController extends Controller
 					return ' ';
 				}
 			})
-
 			->editColumn('purchase_price', function ($active) {
 				return 'Rp. '.number_format($active->purchase_price);
 			})
-			
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
@@ -378,29 +319,7 @@ class PickupController extends Controller
 	{
 		try {
 
-			$active 	= Pickup::select([
-				'pick_up.id as id_pickup',
-				'pick_up.courier as id_courier',
-				'users.name as courier_name',
-				'pick_up.type',
-				'pick_up.is_send_to_customer',
-				'pick_up.status',
-				'pick_up.deleted_at as cancel',
-				'pick_up.created_at as date',
-				'supplier.name as supplier_name',
-				'item.name as item_name',
-				'pick_up_detail.qty',
-				'pick_up_detail.purchase_price',
-				'pick_up_detail.is_first_row',
-			])
-			->join('pick_up_detail', 'pick_up_detail.pick_up_id', '=', 'pick_up.id')
-			->join('supplier', 'supplier.id', '=', 'pick_up_detail.supplier')
-			->join('item', 'item.id', '=', 'pick_up_detail.item')
-			->join('users', 'users.id', '=', 'pick_up.courier')
-			->onlyTrashed()
-			->orderBy('pick_up.created_at', 'DESC')
-			->orderBy('pick_up_detail.is_first_row', 'DESC')
-			->get();
+			$active 			= $this->PickupModel->getPickupCancel();
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -470,11 +389,9 @@ class PickupController extends Controller
 					return ' ';
 				}
 			})
-
 			->editColumn('purchase_price', function ($active) {
 				return 'Rp. '.number_format($active->purchase_price);
 			})
-			
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
@@ -493,24 +410,8 @@ class PickupController extends Controller
 	public function getPickupActiveById($id_pickup)
 	{
 		try {
-			$pickup 		= Pickup::select([
-				'pick_up.id as id_pickup',
-				'users.name as courier_name',
-				'pick_up.type',
-				'pick_up.is_send_to_customer',
-				'pick_up.status',
-				'pick_up.deleted_at as cancel',
-				'supplier.name as supplier_name',
-				'item.name as item_name',
-				'pick_up_detail.qty',
-				'pick_up_detail.purchase_price',
-			])
-			->join('pick_up_detail', 'pick_up_detail.pick_up_id', '=', 'pick_up.id')
-			->join('supplier', 'supplier.id', '=', 'pick_up_detail.supplier')
-			->join('item', 'item.id', '=', 'pick_up_detail.item')
-			->join('users', 'users.id', '=', 'pick_up.courier')
-			->where('pick_up.id', $id_pickup)
-			->get();
+
+			$pickup 				= $this->PickupModel->getPickupActiveById($id_pickup);
 
 			$data['title'] 			= 'Detail Pengambilan ID Pickup '.$id_pickup.' - PUDEMAS';
 			$data['page'] 			= 'Detail Pengambilan ID Pickup '.$id_pickup;
@@ -668,7 +569,13 @@ class PickupController extends Controller
 
 				return redirect()->route('createPickup')
 				->with('success', 'Data Berhasil Disimpan');
-
+			/*
+			*
+			*
+			END OF IF DIDN'T SEND TO CUSTOMER
+			*
+			*
+			*/
 			// Jika dikirim langsung ke customer
 			}elseif($is_send == '1') {
 				// Jika data item dikirim kosong
@@ -784,6 +691,19 @@ class PickupController extends Controller
 		
 	}
 
+	public function storeLocation(Request $request) 
+	{
+		try {
+			$pickup 			= Pickup::find($request->id);
+			$pickup->location 	= $request->location;
+			$ajax 				= $pickup->save();
+
+			return response()->json($ajax);
+		} catch (\Exception $e) {
+			dd($e->getMessage());
+		}
+	}
+
 	/**
 	 * Display the specified resource.
 	 *
@@ -856,10 +776,23 @@ class PickupController extends Controller
 					$courier 			= User::find($user->id);
 					$courier->is_free 	= '0';
 					$courier->save();
-				}
+				}	
+			/*
+			*
+			IF SEND TO CUSTOMER
+			*/	
+			}elseif($request->is_send_to_customer == 1) {
+				$pickup         = Pickup::find($request->id_pickup);
+                $pickup->status = $request->changeTo;
+                $pickup->save();
 
+                $delivery           = Delivery::find($request->id_pickup);
+                $delivery->status   = $request->changeTo+1;
+                $delivery->save();
 
-				
+                $courier            = User::find($user->id);
+                $courier->is_free   = '0';
+                $courier->save();
 			}
 
 			return back()->with('success', 'Job berhasil diupdate');
@@ -882,7 +815,26 @@ class PickupController extends Controller
 				$courier 			= User::find($request->id_courier);
 				$courier->is_free 	= '1';
 				$courier->save();
-				
+			/*
+			*
+			IF SEND TO CUSTOMER
+			*/
+			}elseif($request->is_send_to_customer == 1) {
+				$pickup 		= Pickup::where('id', $request->id_pickup);
+				$pickup->Delete();
+
+				$detail 		= PickupDetail::where('pick_up_id', $request->id_pickup);
+				$detail->delete();
+
+				$delivery 		= Delivery::where('id', $request->id_pickup);
+				$delivery->Delete();
+
+				$detail 		= DeliveryDetail::where('delivery_id', $request->id_pickup);
+				$detail->delete();
+
+				$courier 			= User::find($request->id_courier);
+				$courier->is_free 	= '1';
+				$courier->save();
 			}
 
 			return back()->with('success', 'Job berhasil dibatalkan');
@@ -904,7 +856,26 @@ class PickupController extends Controller
 				$courier 			= User::find($request->id_courier);
 				$courier->is_free 	= '0';
 				$courier->save();
-				
+			/*
+			*
+			IF SEND TO CUSTOMER
+			*/
+			}elseif($request->is_send_to_customer == 1) {
+				$pickup 		= Pickup::where('id', $request->id_pickup);
+				$pickup->restore();
+
+				$detail 		= PickupDetail::where('pick_up_id', $request->id_pickup);
+				$detail->restore();
+
+				$delivery 		= Delivery::where('id', $request->id_pickup);
+				$delivery->restore();
+
+				$detail 		= DeliveryDetail::where('delivery_id', $request->id_pickup);
+				$detail->restore();
+
+				$courier 			= User::find($request->id_courier);
+				$courier->is_free 	= '0';
+				$courier->save();
 			}
 
 			return back()->with('success', 'Job berhasil diupdate');

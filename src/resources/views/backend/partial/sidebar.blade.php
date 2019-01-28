@@ -42,19 +42,24 @@
 						@endrole
 					</ul>
 				</li>
-				<li id="pickup-link"><a id="pickup-link2" href="#dropdown-pickup" aria-expanded="false" data-toggle="collapse"><i class="la la-send"></i><span>Transaksi Pengiriman</span></a>
-					<ul id="dropdown-pickup" class="collapse list-unstyled pt-0">
+				<li id="delivery-link"><a id="delivery-link2" href="#dropdown-delivery" aria-expanded="false" data-toggle="collapse"><i class="la la-send"></i><span>Transaksi Pengiriman</span></a>
+					<ul id="dropdown-delivery" class="collapse list-unstyled pt-0">
 						@role('Admin|Pimpinan')
-						<li><a id="pickup-index-link" href="{{ route('pickup') }}">Data Pengiriman Selesai</a></li>
-						<li><a id="pickup-active-link" href="{{ route('pickupActive') }}">Data Pengiriman Aktif</a></li>
-						<li><a id="pickup-cancel-link" href="{{ url('pickup/cancel') }}">Data Pengiriman Dibatalkan</a></li>
-						<li><a id="add-pickup-link" href="{{ route('createPickup') }}">Input Pengiriman</a></li>
+						<li><a id="delivery-index-link" href="{{ route('delivery') }}">Data Pengiriman Selesai</a></li>
+						<li><a id="delivery-active-link" href="{{ route('activeDelivery') }}">Data Pengiriman Aktif</a></li>
+						<li><a id="delivery-cancel-link" href="{{ url('delivery/deliveryCancel') }}">Data Pengiriman Dibatalkan</a></li>
+						<li><a id="add-delivery-link" href="{{ route('createDelivery') }}">Input Pengiriman</a></li>
 						@endrole
 						@role('Kurir')
-						<li><a id="pickup-active-link" href="{{ route('pickupActiveCourier') }}">Data Pengiriman Aktif</a></li>
+						<li><a id="delivery-active-link" href="{{ url('delivery/activeDeliveryCourier') }}">Data Pengiriman Aktif</a></li>
 						@endrole
 					</ul>
 				</li>
+				@role('Admin|Pimpinan')
+				<li id="courier-link"><a href="{{ route('courier.index') }}"><i class="la la-user-secret"></i><span>Data Kurir</span></a></li>
+				<li id="expenses-link"><a href="{{ route('otherExpenses') }}"><i class="la la-sign-out"></i><span>Data Pengeluaran</span></a></li>
+				@endrole
+				<li><a href="{{ route('home') }}"><i class="la la-gear"></i><span>Setting</span></a></li>
 			</ul>
 			
 			<!-- End Main Navigation -->

@@ -185,6 +185,24 @@ var showModal = {
 		});
 	},
 
+	//Other Expenses
+	destroyOtherExpenses : function() {
+		$('#table-expenses').on('click', '.button-destroy', function() {
+			$('.id-expenses').val($(this).attr('id'));
+			$('#delete-data').modal('show');
+		})
+	},
+
+	updateOtherExpenses : function() {
+		$('#table-expenses').on('click', '.button-update', function() {
+			$('.id-expenses').val($(this).attr('id'));
+			$('#edit-subject').val($(this).attr('subject'));
+			$('#edit-amount').val($(this).attr('amount'));
+			$('#edit-date').datepicker('setDate', $(this).attr('date')).datepicker('fill');
+			$('#update-data').modal('show');
+		})
+	},
+
 }
 
 var select2 = {
@@ -373,27 +391,27 @@ var event = {
 
 			if (option == '1') {
 				html = 	'<div class="em-separator separator-dashed"></div>'+
-						'<h4>Input Data Barang Yang Dikirim</h4>'+
-						'<div class="em-separator separator-dashed"></div>'+
-						'<div class="form-group row d-flex align-items-center mb-3 is-visible">'+
-							'<label class="col-lg-4 form-control-label d-flex justify-content-lg-start">Harga Jual Barang</label>'+
-							'<div class="col-lg-8">'+
-								'<input type="number" name="selling_price" id="selling_price" class="form-control input-selling-price">'+
-							'</div>'+
-						'</div>';
+				'<h4>Input Data Barang Yang Dikirim</h4>'+
+				'<div class="em-separator separator-dashed"></div>'+
+				'<div class="form-group row d-flex align-items-center mb-3 is-visible">'+
+				'<label class="col-lg-4 form-control-label d-flex justify-content-lg-start">Harga Jual Barang</label>'+
+				'<div class="col-lg-8">'+
+				'<input type="number" name="selling_price" id="selling_price" class="form-control input-selling-price">'+
+				'</div>'+
+				'</div>';
 				html2 = '<div class="em-separator separator-dashed"></div>'+
-						'<h4>Finalisasi Data Barang Yang Dikirim</h4>'+
-						'<div class="em-separator separator-dashed"></div>'+
-						'<div class="form-group row d-flex align-items-center mb-5">'+
-							'<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Customer</label>'+
-							'<div class="col-lg-4">'+
-								'<select name="customer" class="form-control select-customer" required></select>'+
-							'</div>'+
-							'<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Ongkos Pengiriman</label>'+
-							'<div class="col-lg-4">'+
-								'<input type="number" name="send_cost" id="send_cost" class="form-control">'+
-							'</div>'+
-						'</div>';
+				'<h4>Finalisasi Data Barang Yang Dikirim</h4>'+
+				'<div class="em-separator separator-dashed"></div>'+
+				'<div class="form-group row d-flex align-items-center mb-5">'+
+				'<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Customer</label>'+
+				'<div class="col-lg-4">'+
+				'<select name="customer" class="form-control select-customer" required></select>'+
+				'</div>'+
+				'<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Ongkos Pengiriman</label>'+
+				'<div class="col-lg-4">'+
+				'<input type="number" name="send_cost" id="send_cost" class="form-control">'+
+				'</div>'+
+				'</div>';
 
 				$('#item-visible').html(html);
 
@@ -457,4 +475,21 @@ var event = {
 		});
 		
 	},
+}
+
+var datepicker = {
+	datepicker : function() {
+		$('.datepicker').datepicker
+		({
+			"format"              : 'dd-mm-yyyy',
+			"changeMonth"         :true,
+			"autoclose"           :true,
+			"changeYear"          :true,
+			"widgetPositioning": 
+			{
+				'horizontal': 'auto',
+				'vertical': 'auto'
+			}
+		})
+	}
 }

@@ -221,4 +221,133 @@ var datatables = {
             aaSorting : [],
         })
     },
+
+    /* DELIVERY SECTION */
+    // Table Delivery Active
+    table_delivery : function() {
+        $('#table-delivery').DataTable({
+            processing : true,
+            serverSide : true,
+            ajax : getDelivery,
+            columns : [
+            {data: 'id_delivery'},
+            {data: 'date'},
+            {data: 'status'},
+            {data: 'customer_name'},
+            {data: 'courier_name'},
+            {data: 'is_pickup_first'},
+            {data: 'send_cost'},
+            {data: 'item_name'},
+            {data: 'qty'},
+            {data: 'selling_price'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            paging : true,
+            searching : true,
+            lengthChange : true,
+            info : true,
+            aaSorting : [],
+        })
+    },
+
+    // Table Delivery Active
+    table_delivery_active : function() {
+        $('#table-delivery-active').DataTable({
+            processing : true,
+            serverSide : true,
+            ajax : getDeliveryActive,
+            columns : [
+            {data: 'id_delivery'},
+            {data: 'status'},
+            {data: 'customer_name'},
+            {data: 'courier_name'},
+            {data: 'is_pickup_first'},
+            {data: 'send_cost'},
+            {data: 'item_name'},
+            {data: 'qty'},
+            {data: 'selling_price'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            paging : true,
+            searching : true,
+            lengthChange : true,
+            info : true,
+            aaSorting : [],
+        })
+    },
+
+     // Table Delivery Active Courier
+    table_delivery_active_courier : function() {
+        $('#table-delivery-active').DataTable({
+            processing : true,
+            serverSide : true,
+            ajax : getDeliveryActiveCourier,
+            columns : [
+            {data: 'id_delivery'},
+            {data: 'status'},
+            {data: 'customer_name'},
+            {data: 'courier_name'},
+            {data: 'is_pickup_first'},
+            {data: 'send_cost'},
+            {data: 'item_name'},
+            {data: 'qty'},
+            {data: 'selling_price'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            paging : true,
+            searching : true,
+            lengthChange : true,
+            info : true,
+            aaSorting : [],
+        })
+    },
+
+     // Table Delivery Cancel
+    table_delivery_cancel : function() {
+        $('#table-delivery').DataTable({
+            processing : true,
+            serverSide : true,
+            ajax : getDeliveryCancel,
+            columns : [
+            {data: 'id_delivery'},
+            {data: 'date'},
+            {data: 'status'},
+            {data: 'customer_name'},
+            {data: 'courier_name'},
+            {data: 'is_pickup_first'},
+            {data: 'send_cost'},
+            {data: 'item_name'},
+            {data: 'qty'},
+            {data: 'selling_price'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            paging : true,
+            searching : true,
+            lengthChange : true,
+            info : true,
+            aaSorting : [],
+        })
+    },
+
+    // Table Other Expenses
+    table_other_expenses : function() {
+        $('#table-expenses').DataTable({
+            processing : true,
+            serverSide : true,
+            ajax : getOtherExpenses,
+            columns : [
+            {data: 'rownum', name: 'rownum', orderable: false, searchable: false},
+            {data: 'date'},
+            {data: 'created_by'},
+            {data: 'subject'},
+            {data: 'amount'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            paging : true,
+            searching : true,
+            lengthChange : true,
+            info : true,
+            aaSorting : [],
+        })
+    },
 }

@@ -17,9 +17,11 @@ class CreateTableDelivery extends Migration
         	$table->string('id', 15)->primary();
         	$table->unsignedInteger('customer');
             $table->unsignedInteger('courier');
+            $table->string('receiver', 65)->nullable();
+            $table->string('received_proof', 65)->nullable();
             $table->integer('send_cost')->default('0')->nullable();
             $table->integer('is_pickup_first')->comments('1=Ya, 0=Tidak');
-            $table->integer('status')->default('3')->comments('3=Tersimpan, 2=job diambil, 1=barang sudah terambil otw balik, 0=selesai');
+            $table->integer('status')->default('4')->comments('4=Tersimpan, 3=job diambil, 2=barang sudah terambil otw balik, 1=otw ke customer, 0=selesai');
             $table->text('location')->nullable();
             $table->softDeletes();
             $table->timestamps();
