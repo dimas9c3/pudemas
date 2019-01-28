@@ -154,7 +154,7 @@
 <script>
 	var id_pickup 			= '{{ $pickup[0]->id_pickup }}';
 	var lat_start           = '-7.5308914';
-	var lng_start           = '110.73142';
+	var lng_start           = '110.73143';
 	var getPickupActiveById = '{{ url('pickup/getPickupActiveById') }}';
 	var token 				= '{{ csrf_token() }}';
 </script>
@@ -233,33 +233,36 @@
 	});
 
 	@endrole
+
+	/* ========= ROLE PIMPINAN OR ADMIN ============= */
+	
 	@role('Pimpinan|Admin')
 	
 	var mymap = L.map('map-courier-detail').setView([JSON.parse(lat_start), JSON.parse(lng_start)], 13);
 
-		        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        			maxZoom: 18,
-        			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        			id: 'mapbox.streets'
-        		}).addTo(mymap);
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
 	
 	function locate() {
-	    $.ajax({
-	        url         : '{{ url('pickup/getPickupLocation') }}',
-	        type        : 'POST',
-	        dataType    : 'JSON',
-	        data        : {_token:token, id: '{{ $pickup[0]->id_pickup }}' },
-	        success     : function(data) {
-	            console.log('Updated Successfully');
-	            
-	            mymap.panTo([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)], 13);
-                
-                var newMark = new L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
+		$.ajax({
+			url         : '{{ url('pickup/getPickupLocation') }}',
+			type        : 'POST',
+			dataType    : 'JSON',
+			data        : {_token:token, id: '{{ $pickup[0]->id_pickup }}' },
+			success     : function(data) {
+				console.log('Updated Successfully');
 
-	        }
-	    });
+				mymap.panTo([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)], 13);
+
+				var newMark = new L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
+
+			}
+		});
 	}
 	
 	// call locate every .. seconds... forever
@@ -267,7 +270,7 @@
 
 	@endrole
 	@elseif($pickup[0]->status == 0)
-		console.log('Job Telah Selesai')
+	console.log('Job Telah Selesai')
 	@endif
 });
 </script>
