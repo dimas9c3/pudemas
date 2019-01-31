@@ -153,9 +153,9 @@
 @section('js-route')
 <script>
 	var id_pickup 			= '{{ $pickup[0]->id_pickup }}';
+	var is_send_to_customer = '{{ $pickup[0]->is_send_to_customer }}';
 	var lat_start           = '-7.5308914';
 	var lng_start           = '110.73143';
-	var getPickupActiveById = '{{ url('pickup/getPickupActiveById') }}';
 	var token 				= '{{ csrf_token() }}';
 </script>
 @endsection
@@ -193,7 +193,7 @@
 	  		url 			: '{{ url('pickup/storeLocation') }}',
 	  		type 			: 'POST',
 	  		dataType 		: 'JSON',
-	  		data 			: {_token: token, id: id_pickup, latitude: e.latlng.lat, longtitude:e.latlng.lng},
+	  		data 			: {_token: token, id: id_pickup, latitude: e.latlng.lat, longtitude:e.latlng.lng, is_send_to_customer: is_send_to_customer},
 	  		success 		: function(data) {
 	  			console.log('Location data successfully stored');
 	  		},

@@ -4,41 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Pickup;
+use App\Delivery;
+use App\User;
 use Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $user                   = Auth::user();
-        $data['title']          = 'Dashboard - PUDEMAS';
-        $data['page']           = 'Dashboard';
-        $data['job_pickup']     = Pickup::select([
-            'pick_up.id as id_pickup',
-            'pick_up.type',
-            'pick_up.is_send_to_customer',
-            'pick_up.status',
-        ])
-        ->where('pick_up.status', '3')
-        ->where('pick_up.is_send_to_customer', '0')
-        ->where('pick_up.courier', $user->id)
-        ->get();
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		$data['title']          	= 'Dashboard - PUDEMAS';
+		$data['page']           	= 'Dashboard';
+		$data['job_pickup']     	= Pickup::PickupCourierHome(Auth::id())->get();
+		$data['free_courier']		= User::Courier()->where('is_free', '1')->count();
+		$data['all_courier']		= User::Courier()->count();
+		$data['active_pickup']		= Pickup::PickupActive()->count();
+		$data['active_delivery']	= Delivery::DeliveryActive()->count();
+		$data['pickup_count']		= Pickup::CountAllPickup()->groupBy('pick_up.courier')->get();
+		$data['delivery_count']		= Delivery::CountAllDelivery()->groupBy('delivery.courier')->get();
 
-        return view('home')->with($data);
-    }
+		return view('home')->with($data);
+	}
 }

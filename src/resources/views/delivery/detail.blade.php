@@ -208,46 +208,65 @@
 @endsection
 @section('js-route')
 <script>
-	var getPickupActiveById = '{{ url('pickup/getPickupActiveById') }}';
+	var id_delivery 		= '{{ $delivery[0]->id_delivery }}';
+	var is_pickup_first 	= '{{ $delivery[0]->is_pickup_first }}';
+	var lat_start           = '-7.5308914';
+	var lng_start           = '110.73143';
 	var token 				= '{{ csrf_token() }}';
 </script>
 @endsection
 @section('js')
 <script>
-	$(document).ready(function() {
-		document.getElementById("delivery-link").classList.add('active');
-		document.getElementById("delivery-link2").setAttribute('aria-expanded','TRUE');
-		document.getElementById("dropdown-delivery").classList.add('show');
+$(document).ready(function() {
+	document.getElementById("delivery-link").classList.add('active');
+	document.getElementById("delivery-link2").setAttribute('aria-expanded','TRUE');
+	document.getElementById("dropdown-delivery").classList.add('show');
 
-		@if($delivery[0]->status != '3' AND $delivery[0]->status != '0')
-		
-		var map = L.map('map-courier-detail');
+	@if($delivery[0]->status != '3' AND $delivery[0]->status != '0')
+	
+	@role('Kurir')
 
-		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-			id: 'mapbox.streets'
-		}).addTo(map);
+	var map = L.map('map-courier-detail');
 
-	 // placeholders for the L.marker and L.circle representing user's current position and accuracy    
-	 var current_position, current_accuracy;
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(map);
 
-	 function onLocationFound(e) {
-	  // if position defined, then remove the existing position marker and accuracy circle from the map
-	  if (current_position) {
-	  	map.removeLayer(current_position);
-	  	map.removeLayer(current_accuracy);
-	  	console.log(e.latlng.lat + ", " + e.latlng.lng);
-	  }
+ 	// placeholders for the L.marker and L.circle representing user's current position and accuracy    
+ 	var current_position, current_accuracy;
 
-	  var radius = e.accuracy / 2;
+ 	function onLocationFound(e) {
+  		// if position defined, then remove the existing position marker and accuracy circle from the map
+  		if (current_position) {
+  			map.removeLayer(current_position);
+  			map.removeLayer(current_accuracy);
 
-	  current_position = L.marker(e.latlng).addTo(map)
-	  .bindPopup("You are within " + radius + " meters from this point").openPopup();
+			//Set current location into db
+			$.ajax({
+				url 			: '{{ url('delivery/storeLocation') }}',
+				type 			: 'POST',
+				dataType 		: 'JSON',
+				data 			: {_token: token, id: id_delivery, latitude: e.latlng.lat, longtitude:e.latlng.lng, is_pickup_first: is_pickup_first},
+				success 		: function(data) {
+					console.log('Location data successfully stored');
+				},
+				error 			: function(data) {
+					console.log('Location data failed to store');
+				}
+			});
 
-	  current_accuracy = L.circle(e.latlng, radius).addTo(map);
+		console.log(e.latlng.lat + ", " + e.latlng.lng);
+	}
+
+	var radius = e.accuracy / 2;
+
+	current_position = L.marker(e.latlng).addTo(map).bindPopup("Kurir anda berada " + radius + " dari point ini").openPopup();
+
+	current_accuracy = L.circle(e.latlng, radius).addTo(map);
 	}
 
 	function onLocationError(e) {
@@ -268,6 +287,44 @@
 	map.on('click', function(e) {
 		alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
 	});
+
+	@endrole
+
+/* ========= ROLE PIMPINAN OR ADMIN ============= */
+
+	@role('Pimpinan|Admin')
+
+	var mymap = L.map('map-courier-detail').setView([JSON.parse(lat_start), JSON.parse(lng_start)], 13);
+
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+
+	function locate() {
+		$.ajax({
+			url         : '{{ url('delivery/getDeliveryLocation') }}',
+			type        : 'POST',
+			dataType    : 'JSON',
+			data        : {_token:token, id: '{{ $delivery[0]->id_delivery }}' },
+			success     : function(data) {
+				console.log('Updated Successfully');
+
+				mymap.panTo([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)], 13);
+
+				var newMark = new L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
+
+			}
+		});
+	}
+
+	// call locate every .. seconds... forever
+	setInterval(locate, 5000);
+
+	@endrole
 
 	@elseif($delivery[0]->status == 0)
 	console.log('Job Telah Selesai')

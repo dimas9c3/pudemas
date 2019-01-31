@@ -12,10 +12,13 @@ class SettingSeeder extends Seeder
      */
     public function run()
     {
-        	DB::table('settings')->insert([
-            'id_courier' 	=> '3',
-            'created_at' 	=> Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' 	=> Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-    }
+       DB::table('settings')->insert([
+        'id_courier' 	        => '3',
+        'lat_start'             => '-7.5308914',
+        'lng_start'             => '110.73143',
+        'default_send_cost'     => '10000',
+        'created_at' 	        => Carbon::now()->format('Y-m-d H:i:s'),
+        'updated_at' 	        => Carbon::now()->format('Y-m-d H:i:s')
+    ]);
+   }
 }

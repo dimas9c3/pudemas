@@ -9,7 +9,9 @@ use App\DeliveryDetail;
 use App\Customer;
 use App\Item;
 use App\User;
+use App\Mail\SellingInvoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use DB;
 use Validator;
 use DataTables;
@@ -461,14 +463,14 @@ class PickupController extends Controller
 	
 	public function getPickupLocation(Request $request)
 	{
-	    $pickup             = Pickup::select([
-	        'latitude',    
-	        'longtitude'
-	    ])
-	    ->where('id', $request->id)
-	    ->get();
-	    
-	    return response()->json($pickup);
+		$pickup             = Pickup::select([
+			'latitude',    
+			'longtitude'
+		])
+		->where('id', $request->id)
+		->get();
+
+		return response()->json($pickup);
 	}
 
 	/**
@@ -590,7 +592,7 @@ class PickupController extends Controller
 			*/
 			// Jika dikirim langsung ke customer
 			}elseif($is_send == '1') {
-				// Jika data item dikirim kosong
+					// Jika data item dikirim kosong
 				if (empty(session('item-delivery'))) {
 					return redirect()->route('createPickup')
 					->with('error', 'Data Item Yang Dikirim Kosong, Silahkan Isi Terlebih Dulu Lalu Submit Data Sekali Lagi.');
@@ -673,11 +675,25 @@ class PickupController extends Controller
 					$row_identifier 			= 1;
 				}
 
+				//Send Email
+
+				$cust 			= Customer::find($request->customer);
+
+				$content = [
+		 			'title'				=> 'PUDEMAS SHOP', 
+		 			'body'				=> 'Terima Kasih Telah Berbelanja.',
+		 			'button' 			=> 'Click Here',
+		 			'url'				=> url('/'),
+		 			'id_delivery'		=> $id_pickup,
+	 			];
+
+		 		Mail::to($cust->email)->send(new SellingInvoice($content));
+
 				// Hapus session item pickup
 				$request->session()->forget('item-pickup');
 				$request->session()->forget('item-delivery');
 
-				// Send Telegram Message
+					// Send Telegram Message
 				$text = "<code>Job Baru Pengambilan Barang</code>\n"
 				. "\n"
 				. "Hello Kurir,<b> ".$nm_courier.". </b>\n"
@@ -694,72 +710,40 @@ class PickupController extends Controller
 
 				return redirect()->route('createPickup')
 				->with('success', 'Data Berhasil Disimpan');
-			}
-			
-		} catch (\Exception $e) {
+			} 
+
+		}catch (\Exception $e) {
 			return redirect()->route('createPickup')
 			->with('error', $e->getMessage());
 		}
-		
 	}
 
 	public function storeLocation(Request $request) 
 	{
 		try {
-			$pickup 			= Pickup::find($request->id);
-			$pickup->latitude 	= $request->latitude;
-			$pickup->longtitude = $request->longtitude;
-			$ajax 				= $pickup->save();
+			
+			// If Send To Customer
+			if ($request->is_send_to_customer == 1) {
+				$delivery 				= Delivery::find($request->id);
+				$delivery->latitude 	= $request->latitude;
+				$delivery->longtitude 	= $request->longtitude;
+				$delivery->save();
 
+				$pickup 				= Pickup::find($request->id);
+				$pickup->latitude 		= $request->latitude;
+				$pickup->longtitude 	= $request->longtitude;
+				$ajax 					= $pickup->save();
+			}else{
+				$pickup 				= Pickup::find($request->id);
+				$pickup->latitude 		= $request->latitude;
+				$pickup->longtitude 	= $request->longtitude;
+				$ajax 					= $pickup->save();
+			}
+			
 			return response()->json($ajax);
 		} catch (\Exception $e) {
 			dd($e->getMessage());
 		}
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  \App\Pickup  $pickup
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show(Pickup $pickup)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  \App\Pickup  $pickup
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit(Pickup $pickup)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \App\Pickup  $pickup
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, Pickup $pickup)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  \App\Pickup  $pickup
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy(Pickup $pickup)
-	{
-		//
 	}
 
 	/**
@@ -796,20 +780,18 @@ class PickupController extends Controller
 			*/	
 			}elseif($request->is_send_to_customer == 1) {
 				$pickup         = Pickup::find($request->id_pickup);
-                $pickup->status = $request->changeTo;
-                $pickup->save();
+				$pickup->status = $request->changeTo;
+				$pickup->save();
 
-                $delivery           = Delivery::find($request->id_pickup);
-                $delivery->status   = $request->changeTo+1;
-                $delivery->save();
+				$delivery           = Delivery::find($request->id_pickup);
+				$delivery->status   = $request->changeTo+1;
+				$delivery->save();
 
-                $courier            = User::find($user->id);
-                $courier->is_free   = '0';
-                $courier->save();
+				$courier            = User::find($user->id);
+				$courier->is_free   = '0';
+				$courier->save();
 			}
-
 			return back()->with('success', 'Job berhasil diupdate');
-			
 		} catch (\Exception $e) {
 			return back()->with('error',$e->getMessage());
 		}
@@ -869,10 +851,10 @@ class PickupController extends Controller
 				$courier 			= User::find($request->id_courier);
 				$courier->is_free 	= '0';
 				$courier->save();
-			/*
-			*
-			IF SEND TO CUSTOMER
-			*/
+				/*
+				*
+				IF SEND TO CUSTOMER
+				*/
 			}elseif($request->is_send_to_customer == 1) {
 				$pickup 		= Pickup::where('id', $request->id_pickup);
 				$pickup->restore();
@@ -897,15 +879,15 @@ class PickupController extends Controller
 		}
 	}
 
-	 /**
-	 * Telegram Function
-	 *
-	 * @param  \App\Pickup  $pickup
-	 * @return \Illuminate\Http\Response
-	 */
-	 public function updatedActivity(Request $request)
-	 {
-	 	$activity = Telegram::getUpdates();
-	 	dd($activity);
-	 }
+	/**
+	* 
+	*Telegram Function
+	*
+	*/
+
+	public function updatedActivity(Request $request)
+	{
+		$activity = Telegram::getUpdates();
+		dd($activity);
 	}
+}

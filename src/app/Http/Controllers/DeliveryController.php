@@ -560,6 +560,18 @@ class DeliveryController extends Controller
 		}
 	}
 
+	public function getDeliveryLocation(Request $request)
+	{
+		$delivery             = Delivery::select([
+			'latitude',    
+			'longtitude'
+		])
+		->where('id', $request->id)
+		->get();
+
+		return response()->json($delivery);
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -670,6 +682,34 @@ class DeliveryController extends Controller
 			->with('error', $e->getMessage());
 		}
 
+	}
+
+	public function storeLocation(Request $request) 
+	{
+		try {
+			
+			// If Send To Customer
+			if ($request->is_pickup_first == 1) {
+				$delivery 				= Delivery::find($request->id);
+				$delivery->latitude 	= $request->latitude;
+				$delivery->longtitude 	= $request->longtitude;
+				$delivery->save();
+
+				$pickup 				= Pickup::find($request->id);
+				$pickup->latitude 		= $request->latitude;
+				$pickup->longtitude 	= $request->longtitude;
+				$ajax 					= $pickup->save();
+			}else{
+				$delivery 				= Delivery::find($request->id);
+				$delivery->latitude 	= $request->latitude;
+				$delivery->longtitude 	= $request->longtitude;
+				$delivery->save();
+			}
+			
+			return response()->json($ajax);
+		} catch (\Exception $e) {
+			dd($e->getMessage());
+		}
 	}
 
 	/**

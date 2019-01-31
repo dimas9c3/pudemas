@@ -5,7 +5,7 @@
 		<nav class="side-navbar box-scroll sidebar-scroll">
 			<!-- Begin Main Navigation -->
 			<ul class="list-unstyled">
-				<li><a href="{{ route('home') }}"><i class="la la-home"></i><span>Dashboard</span></a></li>
+				<li id="dashboard-link"><a href="{{ route('home') }}"><i class="la la-home"></i><span>Dashboard</span></a></li>
 				@can('master-items')
 				<li id="master-link"><a id="master-link2" href="#dropdown-master" aria-expanded="false" data-toggle="collapse"><i class="la la-spinner"></i><span>Data Master</span></a>
 					<ul id="dropdown-master" class="collapse list-unstyled pt-0">
@@ -58,8 +58,8 @@
 				@role('Admin|Pimpinan')
 				<li id="courier-link"><a href="{{ route('courier.index') }}"><i class="la la-user-secret"></i><span>Data Kurir</span></a></li>
 				<li id="expenses-link"><a href="{{ route('otherExpenses') }}"><i class="la la-sign-out"></i><span>Data Pengeluaran</span></a></li>
+				<li id="setting-link"><a href="{{ route('setting.index') }}"><i class="la la-gear"></i><span>Setting</span></a></li>
 				@endrole
-				<li><a href="{{ route('home') }}"><i class="la la-gear"></i><span>Setting</span></a></li>
 			</ul>
 			
 			<!-- End Main Navigation -->

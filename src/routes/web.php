@@ -22,8 +22,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
-    Route::resource('roles','RoleController');
-    Route::resource('users','UserController');
+	Route::resource('roles','RoleController');
+	Route::resource('users','UserController');
 });
 
 //User Class Route
@@ -104,7 +104,6 @@ Route::group(['middleware' => ['auth'], ['as' => 'pickup-route']], function() {
 	Route::get('/pickup/cancelPickup', 'PickupController@cancelPickup')->name('cancelPickup');
 	Route::get('/pickup/recyclePickup', 'PickupController@recyclePickup')->name('recyclePickup');
 	Route::get('/pickup/updatedActivity', 'PickupController@updatedActivity');
-
 });
 
 //Delivery Class Route
@@ -118,8 +117,10 @@ Route::group(['middleware' => ['auth'], ['as' => 'delivery-route']], function() 
 	Route::get('/delivery/getDeliveryActiveCourier', 'DeliveryController@getDeliveryActiveCourier');
 	Route::get('/delivery/getDeliveryCancel', 'DeliveryController@getDeliveryCancel');
 	Route::get('/delivery/getDeliveryActiveById/{id_delivery}', 'DeliveryController@getDeliveryActiveById');
+	Route::post('/delivery/getDeliveryLocation', 'DeliveryController@getDeliveryLocation');
 	Route::get('/delivery/createDelivery', 'DeliveryController@createDelivery')->name('createDelivery');
-	Route::post('delivery/storeDelivery', 'DeliveryController@storeDelivery');
+	Route::post('/delivery/storeDelivery', 'DeliveryController@storeDelivery');
+	Route::post('/delivery/storeLocation', 'DeliveryController@storeLocation');
 	Route::get('/delivery/cancelDelivery', 'DeliveryController@cancelDelivery')->name('cancelDelivery');
 	Route::get('/delivery/recycleDelivery', 'DeliveryController@recycleDelivery')->name('recycleDelivery');
 	Route::get('/delivery/changeDeliveryJob', 'DeliveryController@changeDeliveryJob')->name('changeDeliveryJob');
@@ -139,6 +140,13 @@ Route::group(['middleware' => ['auth'], ['as' => 'other-expenses-route']], funct
 	Route::post('/other_expenses/destroyOtherExpenses', 'OtherExpensesController@destroyOtherExpenses');
 	Route::post('/other_expenses/updateOtherExpenses', 'OtherExpensesController@updateOtherExpenses');
 });
+
+//Setting Route
+Route::group(['middleware' => ['auth'], ['as' => 'setting-route']], function() {
+	Route::get('/setting', 'SettingController@index')->name('setting.index');
+	Route::post('/setting/updateSetting', 'SettingController@updateSetting');
+});
+
 
 
 

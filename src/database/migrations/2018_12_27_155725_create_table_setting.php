@@ -16,6 +16,9 @@ class CreateTableSetting extends Migration
         Schema::create('settings', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('id_courier');
+            $table->text('lat_start');
+            $table->text('lng_start');
+            $table->integer('default_send_cost');
             $table->timestamps();
         });
     }
