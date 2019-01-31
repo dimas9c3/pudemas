@@ -15,7 +15,7 @@ class CustomerSeeder extends Seeder
         DB::table('customer')->insert([
         	'customer_type'	=> '1',
             'name' 			=> 'Amir',
-            'email'			=> 'amir@gmail.com',
+            'email'			=> 'dimas9c3@gmail.com',
             'phone'			=> '082112311234',
             'address'		=> 'Solo',
             'created_at' 	=> Carbon::now()->format('Y-m-d H:i:s'),
@@ -25,7 +25,7 @@ class CustomerSeeder extends Seeder
          DB::table('customer')->insert([
             'customer_type' => '1',
             'name'          => 'Budi',
-            'email'         => 'budi@gmail.com',
+            'email'         => 'dimas.visualb@gmail.com',
             'phone'         => '083112311234',
             'address'       => 'Solo',
             'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),

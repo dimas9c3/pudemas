@@ -152,7 +152,7 @@
 							</tbody>
 						</table>
 					</div>
-					@if($delivery[0]->status != 3 AND $delivery[0]->status != 0)
+					@if($delivery[0]->status != 4 AND $delivery[0]->status != 0)
 					<hr>
 					<h4>Lokasi Realtime Kurir</h4>
 					<div class="courier-location" id="map-courier-detail"></div>
@@ -222,7 +222,7 @@ $(document).ready(function() {
 	document.getElementById("delivery-link2").setAttribute('aria-expanded','TRUE');
 	document.getElementById("dropdown-delivery").classList.add('show');
 
-	@if($delivery[0]->status != '3' AND $delivery[0]->status != '0')
+	@if($delivery[0]->status != '4' AND $delivery[0]->status != '0')
 	
 	@role('Kurir')
 
