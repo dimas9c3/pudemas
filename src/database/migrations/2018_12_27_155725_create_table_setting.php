@@ -18,6 +18,8 @@ class CreateTableSetting extends Migration
             $table->integer('id_courier');
             $table->text('lat_start');
             $table->text('lng_start');
+            $table->integer('watcher_view_update');
+            $table->integer('courier_location_update');
             $table->integer('default_send_cost');
             $table->timestamps();
         });

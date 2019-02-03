@@ -282,7 +282,7 @@ $(document).ready(function() {
 	}
 
 	// call locate every .. seconds... forever
-	setInterval(locate, 60000);
+	setInterval(locate, <?php echo $courier_update.'000'; ?>);
 	
 	map.on('click', function(e) {
 		alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
@@ -322,7 +322,7 @@ $(document).ready(function() {
 	}
 
 	// call locate every .. seconds... forever
-	setInterval(locate, 5000);
+	setInterval(locate, <?php echo $watcher.'000'; ?>);
 
 	@endrole
 

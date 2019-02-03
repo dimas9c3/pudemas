@@ -70,6 +70,18 @@
 								<input type="number" class="form-control" name="default_send_cost" value="{{ $setting[0]->default_send_cost }}" required>
 							</div>
 						</div>
+						<div class="form-group row d-flex align-items-center mb-5">
+							<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Update Interval Pengawas</label>
+							<div class="col-lg-6">
+								<input type="number" class="form-control" name="default_watcher" value="{{ $setting[0]->watcher_view_update }}" required>
+							</div>Detik
+						</div>
+						<div class="form-group row d-flex align-items-center mb-5">
+							<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Update Interval Kurir</label>
+							<div class="col-lg-6">
+								<input type="number" class="form-control" name="default_courier" value="{{ $setting[0]->courier_location_update }}" required>
+							</div>Detik
+						</div>
 
 						<div class="em-separator separator-dashed"></div>
 						<div class="text-right">

@@ -9,6 +9,7 @@ use App\DeliveryDetail;
 use App\Customer;
 use App\Item;
 use App\User;
+use App\Setting;
 use App\Mail\SellingInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -413,6 +414,9 @@ class PickupController extends Controller
 	{
 		try {
 
+			$setting 				= Setting::find(1);
+			$watcher 				= $setting->watcher_view_update;
+			$courier_update 		= $setting->courier_location_update;
 			$pickup 				= $this->PickupModel->getPickupActiveById($id_pickup);
 
 			$data['title'] 			= 'Detail Pengambilan ID Pickup '.$id_pickup.' - PUDEMAS';
@@ -455,7 +459,7 @@ class PickupController extends Controller
 				$send 				= 'Ya';
 			}
 
-			return view('pickup/detail', compact('pickup', 'gt', 'status', 'send'))->with($data);
+			return view('pickup/detail', compact('pickup', 'gt', 'status', 'send', 'watcher', 'courier_update'))->with($data);
 		} catch (\Exception $e) {
 			dd($e->getMessage());
 		}

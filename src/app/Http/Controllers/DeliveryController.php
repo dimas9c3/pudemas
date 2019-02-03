@@ -8,7 +8,10 @@ use App\Pickup;
 use App\Customer;
 use App\Item;
 use App\User;
+use App\Setting;
+use App\Mail\SellingInvoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use DB;
 use Validator;
 use DataTables;
@@ -500,6 +503,10 @@ class DeliveryController extends Controller
 			$data['title']          = 'Detail Pengiriman ID Delivery '.$id_delivery.' - PUDEMAS';
 			$data['page']           = 'Detail Pengiriman ID Delivery '.$id_delivery;
 
+			$setting 				= Setting::find(1);
+			$watcher 				= $setting->watcher_view_update;
+			$courier_update 		= $setting->courier_location_update;
+
 			$delivery               = $this->DeliveryModel->getDeliveryActiveById($id_delivery);
 
 			//Count transaction total
@@ -554,7 +561,7 @@ class DeliveryController extends Controller
 			$ph 					= substr($delivery[0]->phone, 1);
 			$phone 					= '62'.$ph;
 
-			return view('delivery/detail', compact('delivery', 'gt', 'status', 'send', 'send_cost', 'phone'))->with($data);
+			return view('delivery/detail', compact('delivery', 'gt', 'status', 'send', 'send_cost', 'phone', 'watcher', 'courier_update'))->with($data);
 		} catch (\Exception $e) {
 			dd($e->getMessage());
 		}
@@ -655,6 +662,20 @@ class DeliveryController extends Controller
 				$detail->save();
 				$row_identifier             = 1;
 			}
+
+			//Send Email
+
+			$cust 			= Customer::find($request->customer);
+
+			$content = [
+	 			'title'				=> 'PUDEMAS SHOP', 
+	 			'body'				=> 'Terima Kasih Telah Berbelanja.',
+	 			'button' 			=> 'Click Here',
+	 			'url'				=> url('/'),
+	 			'id_delivery'		=> $id_delivery,
+ 			];
+
+	 		Mail::to($cust->email)->send(new SellingInvoice($content));
 
 			// Hapus session item delivery
 			$request->session()->forget('item-delivery');

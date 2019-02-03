@@ -80,6 +80,8 @@ class SettingController extends Controller
                 'lat_start'             => 'Default Latitude Toko',
                 'lng_start'             => 'Default Longtitude Toko',
                 'default_send_cost'     => 'Biaya Kirim Per KM',
+                'default_watcher'       => 'Update Interval Pengawas',
+                'default_courier'       => 'Update Interval Kurir',
             );
 
             $validator                  = Validator::make($request->all(), [
@@ -87,6 +89,8 @@ class SettingController extends Controller
                 'lat_start'             => 'required',
                 'lng_start'             => 'required',
                 'default_send_cost'     => 'required|numeric',
+                'default_watcher'       => 'required|numeric',
+                'default_courier'       => 'required|numeric',
             ]);
 
             if ($validator->fails()) {
@@ -95,12 +99,14 @@ class SettingController extends Controller
                 ->withInput();
             }
 
-            $setting                    = Setting::find(1);
-            $setting->id_courier        = $request->id_courier;
-            $setting->lat_start         = $request->lat_start;
-            $setting->lng_start         = $request->lng_start;
-            $setting->default_send_cost = $request->default_send_cost;
-            $action                     = $setting->save();
+            $setting                                = Setting::find(1);
+            $setting->id_courier                    = $request->id_courier;
+            $setting->lat_start                     = $request->lat_start;
+            $setting->lng_start                     = $request->lng_start;
+            $setting->default_send_cost             = $request->default_send_cost;
+            $setting->watcher_view_update           = $request->default_watcher;
+            $setting->courier_location_update       = $request->default_courier;
+            $action                                 = $setting->save();
 
             return redirect()->back()->with('success', 'Data Berhasil Diupdate');
         } catch (\Exception $e) {
