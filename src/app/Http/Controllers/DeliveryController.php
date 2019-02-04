@@ -883,8 +883,14 @@ class DeliveryController extends Controller
 				$courier            = User::find($user->id);
 				$courier->is_free   = '0';
 				$courier->save();
-				
-				
+			}else {
+				$delivery           = Delivery::find($request->id_delivery);
+				$delivery->status   = $request->changeTo;
+				$delivery->save();
+
+				$courier            = User::find($user->id);
+				$courier->is_free   = '0';
+				$courier->save();
 			}
 
 			return back()->with('success', 'Job berhasil diupdate');
@@ -898,64 +904,60 @@ class DeliveryController extends Controller
 	{
 		try {
 			$user           = Auth::user();
-			//Jika diambil ke supplier
-			if ($request->is_pickup_first == 1) {
 
-				$attributeNames             = array(
-					'reciver'               => 'Penerima',
-					'received_proof'        => 'Bukti Penerimaan'
-				);
+			$attributeNames             = array(
+				'reciver'               => 'Penerima',
+				'received_proof'        => 'Bukti Penerimaan'
+			);
 
-				$validator                  = Validator::make($request->all(), [
-					'receiver'              => 'required|min:2',
-					'received_proof'        => 'image|mimes:jpeg,bmp,png,jpg',
-				]);
+			$validator                  = Validator::make($request->all(), [
+				'receiver'              => 'required|min:2',
+				'received_proof'        => 'image|mimes:jpeg,bmp,png,jpg',
+			]);
 
-				$validator->setAttributeNames($attributeNames);
+			$validator->setAttributeNames($attributeNames);
 
-				if ($validator->fails()) {
-					return back()
-					->withErrors($validator)
-					->withInput();
-				}
-
-				$file = $request->file('received_proof');
-				//get filename with extension
-				$filenamewithextension = $file->getClientOriginalName();
-
-				//get filename without extension
-				$filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-
-				//get file extension
-				$extension = $file->getClientOriginalExtension();
-
-				//filename to store
-				$filenametostore = $filename.'_'.uniqid().'.'.$extension;
-
-				//thumbnail path
-				$thumbnailpath = public_path('storage/images/received_proof/thumbnail/'.$filenametostore);
-
-				//Resize image here
-				$image = Image::make($file->getRealPath());
-
-				$image->fit(300, 300, function ($constraint) {
-					$constraint->aspectRatio();
-				})->save($thumbnailpath);
-
-				// Store Original image size
-				Storage::put('public/images/received_proof/'. $filenametostore, fopen($file, 'r+'));
-
-				$delivery                   = Delivery::find($request->id_delivery);
-				$delivery->status           = '0';
-				$delivery->receiver         = $request->receiver;
-				$delivery->received_proof   = $filenametostore;
-				$delivery->save();
-
-				$courier            = User::find($user->id);
-				$courier->is_free   = '1';
-				$courier->save();
-				
+			if ($validator->fails()) {
+				return back()
+				->withErrors($validator)
+				->withInput();
 			}
+
+			$file = $request->file('received_proof');
+			//get filename with extension
+			$filenamewithextension = $file->getClientOriginalName();
+
+			//get filename without extension
+			$filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+
+			//get file extension
+			$extension = $file->getClientOriginalExtension();
+
+			//filename to store
+			$filenametostore = $filename.'_'.uniqid().'.'.$extension;
+
+			//thumbnail path
+			$thumbnailpath = public_path('storage/images/received_proof/thumbnail/'.$filenametostore);
+
+			//Resize image here
+			$image = Image::make($file->getRealPath());
+
+			$image->fit(300, 300, function ($constraint) {
+				$constraint->aspectRatio();
+			})->save($thumbnailpath);
+
+			// Store Original image size
+			Storage::put('public/images/received_proof/'. $filenametostore, fopen($file, 'r+'));
+
+			$delivery                   = Delivery::find($request->id_delivery);
+			$delivery->status           = '0';
+			$delivery->receiver         = $request->receiver;
+			$delivery->received_proof   = $filenametostore;
+			$delivery->save();
+
+			$courier            = User::find($user->id);
+			$courier->is_free   = '1';
+			$courier->save();
 
 			return back()->with('success', 'Job berhasil diupdate');
 			

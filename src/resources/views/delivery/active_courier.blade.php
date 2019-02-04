@@ -19,11 +19,7 @@
 	<div class="row">
 		<div class="page-header">
 			<div class="d-flex align-items-center">
-				<div>
-					<div class="page-header-tools">
-						<a href="{{ route('createPickup') }}" class="btn btn-gradient-01 mb-1">Tambah Data</a>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 
