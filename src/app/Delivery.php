@@ -136,6 +136,7 @@ class Delivery extends Model
 			'delivery.deleted_at as cancel',
 			'users.name as courier_name',
 			'customer.name as customer_name',
+			'customer.address',
 			'customer.phone',
 			'item.name as item_name',
 			'delivery_detail.qty',

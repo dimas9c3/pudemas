@@ -118,6 +118,12 @@
 						</div>
 					</div>
 					@endif
+					<div class="form-group row mb-4">
+						<label class="col-lg-1 form-control-label d-flex justify-content-lg-start">Alamat</label>
+						<div class="col-lg-5">
+							<textarea name="address" class="form-control" rows="5">{{ $delivery[0]->address }}</textarea>
+						</div>
+					</div>
 					<hr>
 					<h4>Data Barang Yang Diambil</h4>
 					<div class="table-responsive">
