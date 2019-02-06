@@ -16,11 +16,11 @@ class Customer extends Model
 
 	protected $dates = ['deleted_at'];
 
-	function getCustomer()
+	public function scopeCustomer($query)
 	{
 		DB::statement(DB::raw('set @rownum=0'));
 
-		$customer = Customer::select([
+		$query->select([
 			DB::raw('@rownum  := @rownum  + 1 AS rownum'),
 			'customer.id',
 			'customer.name',
@@ -29,11 +29,7 @@ class Customer extends Model
 			'customer.phone',
 			'customer.address'
 		])
-		->join('customer_type', 'customer_type.id', '=', 'customer.customer_type')
-		->orderBy('customer.name','asc')
-		->get();
-
-		return $customer;
+		->join('customer_type', 'customer_type.id', '=', 'customer.customer_type');
 	}
 
 }

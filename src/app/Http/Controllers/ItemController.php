@@ -13,6 +13,8 @@ use Validator;
 use Image;
 use Storage;
 use Session;
+use PDF;
+use Carbon\Carbon;
 
 class ItemController extends Controller
 {
@@ -737,6 +739,8 @@ class ItemController extends Controller
 
 	}
 
+	/* UTILITIES */
+
 	public function selectItem(Request $request)
 	{
 		$select = [];
@@ -813,5 +817,13 @@ class ItemController extends Controller
 		} catch (\Exception $e) {
 			dd($e->getMessage());
 		}
+	}
+
+	public function reportItem()
+	{
+		$item 			= Item::Item()->get();
+		$pdf = PDF::loadView('report.item', compact('item'));
+
+      	return $pdf->stream('item-report-'.Carbon::now());
 	}
 }

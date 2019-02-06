@@ -25,8 +25,6 @@ class Supplier extends Model
 			'email',
 			'phone',
 			'address',
-		])
-		->orderBy('name','asc')
-		->get();
+		]);
 	}
 }

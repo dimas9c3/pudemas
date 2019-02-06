@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'customer-route']], function() 
 	Route::post('/customer/updateCustomerType','CustomerController@updateCustomerType')->name('updateCustomerType');
 	Route::get('/customer/selectCustomerType','CustomerController@selectCustomerType')->name('selectCustomerType');
 	Route::get('/customer/selectCustomer', 'CustomerController@selectCustomer');
+	Route::get('/customer/report', 'CustomerController@reportCustomer');
 });
 
 // Item Class Route
@@ -72,6 +73,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'item-route']], function() {
 	Route::get('/item/selectItem', 'ItemController@selectItem')->name('selectItem');
 	Route::get('/item/selectItemCategory1', 'ItemController@selectItemCategory1')->name('selectItemCategory1');
 	Route::get('/item/selectItemCategory2', 'ItemController@selectItemCategory2')->name('selectItemCategory2');
+	Route::get('/item/report', 'ItemController@reportItem');
 });
 
 //Supplier Class Route
@@ -83,6 +85,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'supplier-route']], function() 
 	Route::post('/supplier/destroySupplier', 'SupplierController@destroySupplier')->name('destroySupplier');
 	Route::post('/supplier/updateSupplier', 'SupplierController@updateSupplier')->name('updateSupplier');
 	Route::get('/supplier/selectSupplier', 'SupplierController@selectSupplier')->name('selectSupplier');
+	Route::get('/supplier/report', 'SupplierController@reportSupplier');
 });
 
 //Pick Up Class Route
@@ -95,7 +98,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'pickup-route']], function() {
 	Route::get('/pickup/getPickupActive', 'PickupController@getPickupActive');
 	Route::get('/pickup/getPickupActiveCourier', 'PickupController@getPickupActiveCourier');
 	Route::get('/pickup/getPickupCancel', 'PickupController@getPickupCancel')->name('getPickupCancel');
-	Route::get('/pickup/getPickupActiveById/{id_pickup}', 'PickupController@getPickupActiveById');
+	Route::get('/pickup/getPickupById/{id_pickup}', 'PickupController@getPickupById');
 	Route::post('/pickup/getPickupLocation', 'PickupController@getPickupLocation');
 	Route::get('/pickup/create', 'PickupController@create')->name('createPickup');
 	Route::post('/pickup/storePickup', 'PickupController@storePickup');
@@ -104,6 +107,8 @@ Route::group(['middleware' => ['auth'], ['as' => 'pickup-route']], function() {
 	Route::get('/pickup/cancelPickup', 'PickupController@cancelPickup')->name('cancelPickup');
 	Route::get('/pickup/recyclePickup', 'PickupController@recyclePickup')->name('recyclePickup');
 	Route::get('/pickup/updatedActivity', 'PickupController@updatedActivity');
+	Route::get('/pickup/report', 'PickupController@reportPickup');
+	Route::get('/pickup/note/{id}', 'PickupController@notePickup');
 });
 
 //Delivery Class Route
@@ -116,7 +121,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'delivery-route']], function() 
 	Route::get('/delivery/getDeliveryActive', 'DeliveryController@getDeliveryActive');
 	Route::get('/delivery/getDeliveryActiveCourier', 'DeliveryController@getDeliveryActiveCourier');
 	Route::get('/delivery/getDeliveryCancel', 'DeliveryController@getDeliveryCancel');
-	Route::get('/delivery/getDeliveryActiveById/{id_delivery}', 'DeliveryController@getDeliveryActiveById');
+	Route::get('/delivery/getDeliveryById/{id_delivery}', 'DeliveryController@getDeliveryById');
 	Route::post('/delivery/getDeliveryLocation', 'DeliveryController@getDeliveryLocation');
 	Route::get('/delivery/createDelivery', 'DeliveryController@createDelivery')->name('createDelivery');
 	Route::post('/delivery/storeDelivery', 'DeliveryController@storeDelivery');
@@ -125,6 +130,8 @@ Route::group(['middleware' => ['auth'], ['as' => 'delivery-route']], function() 
 	Route::get('/delivery/recycleDelivery', 'DeliveryController@recycleDelivery')->name('recycleDelivery');
 	Route::get('/delivery/changeDeliveryJob', 'DeliveryController@changeDeliveryJob')->name('changeDeliveryJob');
 	Route::post('/delivery/finishDelivery', 'DeliveryController@finishDelivery');
+	Route::get('/delivery/report', 'DeliveryController@reportDelivery');
+	Route::get('/delivery/invoice/{id}', 'DeliveryController@invoiceDelivery');
 });
 
 //Courier Class Route
@@ -139,6 +146,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'other-expenses-route']], funct
 	Route::post('other_expenses/storeOtherExpenses', 'OtherExpensesController@storeOtherExpenses');
 	Route::post('/other_expenses/destroyOtherExpenses', 'OtherExpensesController@destroyOtherExpenses');
 	Route::post('/other_expenses/updateOtherExpenses', 'OtherExpensesController@updateOtherExpenses');
+	Route::get('/other_expenses/report', 'OtherExpensesController@reportExpenses');
 });
 
 //Setting Route

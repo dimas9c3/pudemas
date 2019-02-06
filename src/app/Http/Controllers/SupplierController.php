@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 use Validator;
+use PDF;
+use Carbon\Carbon;
 
 
 class SupplierController extends Controller
@@ -32,7 +34,7 @@ class SupplierController extends Controller
     public function getSupplier()
     {
         try {
-            $Supplier       = Supplier::Supplier();
+            $Supplier       = Supplier::Supplier()->orderBy('name', 'ASC')->get();
 
             return Datatables::of($Supplier)
             ->addColumn('action', function ($Supplier) {
@@ -168,6 +170,8 @@ class SupplierController extends Controller
         }
     }
 
+    /* UTILITIES */
+
     public function selectSupplier(Request $request)
     {
         $select = [];
@@ -192,5 +196,18 @@ class SupplierController extends Controller
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
+    }
+
+    /* Report */
+
+    public function reportSupplier()
+    {
+        $supplier           = Supplier::Supplier()
+        ->orderBy('name','ASC')
+        ->get();
+
+        $pdf = PDF::loadView('report.supplier', compact('supplier'));
+
+        return $pdf->stream('supplier-report-'.Carbon::now());
     }
 }

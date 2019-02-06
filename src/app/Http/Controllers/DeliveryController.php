@@ -20,15 +20,10 @@ use Carbon\Carbon;
 use Auth;
 use Image;
 use Storage;
+use PDF;
 
 class DeliveryController extends Controller
 {
-	protected $DeliveryModel;
-
-	function __construct()
-	{
-		$this->DeliveryModel          = new Delivery();
-	}
 
 	/**
 	 * Display a listing of the resource.
@@ -69,7 +64,10 @@ class DeliveryController extends Controller
 	public function getDelivery()
 	{
 		try {
-			$active             = $this->DeliveryModel->getDelivery();
+			$active             = Delivery::Delivery()
+			->orderBy('delivery.created_at', 'DESC')
+			->orderBy('delivery_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_delivery', function ($active) {
@@ -160,7 +158,7 @@ class DeliveryController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('delivery/getDeliveryActiveById/'.$active->id_delivery).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
+					<a href="'.url('delivery/getDeliveryById/'.$active->id_delivery).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
 				}else {
 					return ' ';
 				}
@@ -175,7 +173,10 @@ class DeliveryController extends Controller
 	public function getDeliveryActive()
 	{
 		try {
-			$active             = $this->DeliveryModel->getDeliveryActive();
+			$active             = Delivery::DeliveryActive()
+			->orderBy('delivery.created_at', 'DESC')
+			->orderBy('delivery_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_delivery', function ($active) {
@@ -266,7 +267,7 @@ class DeliveryController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('delivery/getDeliveryActiveById/'.$active->id_delivery).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>
+					<a href="'.url('delivery/getDeliveryById/'.$active->id_delivery).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>
 					<a href="'.route('cancelDelivery', ['id_delivery' => $active->id_delivery, 'id_courier' => $active->id_courier, 'is_pickup_first' => $active->is_pickup_first]).'" class="btn btn-danger btn-sm mr-1 mb-2"><i class="la la-close cancel"></i></a>';
 				}else {
 					return ' ';
@@ -283,7 +284,10 @@ class DeliveryController extends Controller
 	{
 		$user                   = Auth::user();
 		try {
-			$active             = $this->DeliveryModel->getDeliveryActiveCourier($user);
+			$active             = Delivery::DeliveryActiveCourier($user)
+			->orderBy('delivery.created_at', 'DESC')
+			->orderBy('delivery_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_delivery', function ($active) {
@@ -374,7 +378,7 @@ class DeliveryController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('delivery/getDeliveryActiveById/'.$active->id_delivery).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
+					<a href="'.url('delivery/getDeliveryById/'.$active->id_delivery).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
 				}else {
 					return ' ';
 				}
@@ -389,7 +393,10 @@ class DeliveryController extends Controller
 	public function getDeliveryCancel()
 	{
 		try {
-			$active             = $this->DeliveryModel->getDeliveryCancel();
+			$active             = Delivery::DeliveryCancel()
+			->orderBy('delivery.created_at', 'DESC')
+			->orderBy('delivery_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_delivery', function ($active) {
@@ -496,7 +503,7 @@ class DeliveryController extends Controller
 		}
 	}
 
-	public function getDeliveryActiveById($id_delivery)
+	public function getDeliveryById($id_delivery)
 	{
 		try {
 
@@ -507,7 +514,14 @@ class DeliveryController extends Controller
 			$watcher 				= $setting->watcher_view_update;
 			$courier_update 		= $setting->courier_location_update;
 
-			$delivery               = $this->DeliveryModel->getDeliveryActiveById($id_delivery);
+			$delivery               = Delivery::DeliveryById($id_delivery)->count();
+
+			//Jika data yg dicari tidak ada
+			if($delivery < 1) {
+				return redirect()->back()->with('error', 'Data Yang Anda Cari Tidak Ada..');
+			}
+
+			$delivery               = Delivery::DeliveryById($id_delivery)->get();
 
 			//Count transaction total
 			$gt         = 0;
@@ -964,5 +978,29 @@ class DeliveryController extends Controller
 		} catch (\Exception $e) {
 			return back()->with('error',$e->getMessage());
 		}
+	}
+
+	public function reportDelivery()
+	{
+		$delivery 			= Delivery::Delivery()
+		->orderBy('delivery.created_at', 'DESC')
+		->orderBy('delivery_detail.is_first_row', 'DESC')
+		->get();
+
+		$pdf = PDF::loadView('report.delivery', compact('delivery'));
+
+        return $pdf->stream('delivery-report-'.Carbon::now());
+	}
+
+	public function invoiceDelivery($id_delivery)
+	{
+		$delivery 			= Delivery::DeliveryById($id_delivery)
+		->orderBy('delivery.created_at', 'DESC')
+		->orderBy('delivery_detail.is_first_row', 'DESC')
+		->get();
+
+		$pdf = PDF::loadView('report.invoice', compact('delivery'));
+
+        return $pdf->stream('invoice-report-'.Carbon::now());
 	}
 }

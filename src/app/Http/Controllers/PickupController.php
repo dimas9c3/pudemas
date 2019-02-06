@@ -19,6 +19,7 @@ use DataTables;
 use Telegram;
 use Carbon\Carbon;
 use Auth;
+use PDF;
 
 class PickupController extends Controller
 {
@@ -27,12 +28,6 @@ class PickupController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	protected $PickupModel;
-
-	function __construct()
-	{
-		$this->PickupModel 			= new Pickup();
-	}
 
 	public function index()
 	{
@@ -70,7 +65,10 @@ class PickupController extends Controller
 	{
 		try {
 
-			$active 			= $this->PickupModel->getPickup();
+			$active 			= Pickup::Pickup()
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -142,7 +140,7 @@ class PickupController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
+					<a href="'.url('pickup/getPickupById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
 				}else {
 					return ' ';
 				}
@@ -158,7 +156,10 @@ class PickupController extends Controller
 	{
 		try {
 
-			$active 			= $this->PickupModel->getPickupActive();
+			$active 			= Pickup::PickupActive()
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -223,7 +224,7 @@ class PickupController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>
+					<a href="'.url('pickup/getPickupById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>
 					<a href="'.route('cancelPickup', ['id_pickup' => $active->id_pickup, 'id_courier' => $active->id_courier, 'is_send_to_customer' => $active->is_send_to_customer]).'" class="btn btn-danger btn-sm mr-1 mb-2"><i class="la la-close cancel"></i></a>';
 				}else {
 					return ' ';
@@ -241,7 +242,10 @@ class PickupController extends Controller
 		$user                   = Auth::user();
 		try {
 
-			$active 			= $this->PickupModel->getPickupActiveCourier($user);
+			$active 			= Pickup::PickupActiveCourier($user)
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -306,7 +310,7 @@ class PickupController extends Controller
 			->addColumn('action', function ($active) {
 				if ($active->is_first_row == 1) {
 					return '
-					<a href="'.url('pickup/getPickupActiveById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
+					<a href="'.url('pickup/getPickupById/'.$active->id_pickup).'" class="btn btn-info btn-sm mr-1 mb-2"><i class="la la-search detail"></i></a>';
 				}else {
 					return ' ';
 				}
@@ -322,7 +326,10 @@ class PickupController extends Controller
 	{
 		try {
 
-			$active 			= $this->PickupModel->getPickupCancel();
+			$active 			= Pickup::PickupCancel()
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
 
 			return Datatables::of($active)
 			->editColumn('id_pickup', function ($active) {
@@ -410,14 +417,21 @@ class PickupController extends Controller
 		}
 	}
 
-	public function getPickupActiveById($id_pickup)
+	public function getPickupById($id_pickup)
 	{
 		try {
+
+			//Jika data yang dicari tidak ada
+			$pickup 				= Pickup::PickupById($id_pickup)->count();
+
+			if($pickup < 1) {
+				return redirect()->back()->with('error', 'Data Yang Dicari Tidak ada..');
+			}
 
 			$setting 				= Setting::find(1);
 			$watcher 				= $setting->watcher_view_update;
 			$courier_update 		= $setting->courier_location_update;
-			$pickup 				= $this->PickupModel->getPickupActiveById($id_pickup);
+			$pickup 				= Pickup::PickupById($id_pickup)->get();
 
 			$data['title'] 			= 'Detail Pengambilan ID Pickup '.$id_pickup.' - PUDEMAS';
 			$data['page'] 			= 'Detail Pengambilan ID Pickup '.$id_pickup;
@@ -893,5 +907,31 @@ class PickupController extends Controller
 	{
 		$activity = Telegram::getUpdates();
 		dd($activity);
+	}
+
+	/* Report */
+
+	public function reportPickup()
+	{
+		$pickup 			= Pickup::Pickup()
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
+
+		$pdf = PDF::loadView('report.pickup', compact('pickup'));
+
+        return $pdf->stream('pickup-report-'.Carbon::now());
+	}
+
+	public function notePickup($id_pickup)
+	{
+		$pickup 			= Pickup::PickupById($id_pickup)
+			->orderBy('pick_up.created_at', 'DESC')
+			->orderBy('pick_up_detail.is_first_row', 'DESC')
+			->get();
+
+		$pdf = PDF::loadView('report.pickup_note', compact('pickup'));
+
+        return $pdf->stream('pickup_note-report-'.Carbon::now());
 	}
 }

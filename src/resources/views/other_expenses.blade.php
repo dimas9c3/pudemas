@@ -61,7 +61,7 @@
 			<!-- Begin Other Expenses -->
 			<div class="widget has-shadow">
 				<div class="widget-header bordered no-actions d-flex align-items-center">
-					<h4>Tabel Pengeluaran Lain Lain</h4>
+					<a href="{{ url('other_expenses/report') }}" class="btn btn-gradient-01 mb-1">Cetak Laporan</a>
 
 				</div>
 				<div class="widget-body">

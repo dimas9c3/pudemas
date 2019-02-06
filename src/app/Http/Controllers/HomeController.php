@@ -32,8 +32,8 @@ class HomeController extends Controller
 		$data['job_pickup']     	= Pickup::PickupCourierHome(Auth::id())->get();
 		$data['free_courier']		= User::Courier()->where('is_free', '1')->count();
 		$data['all_courier']		= User::Courier()->count();
-		$data['active_pickup']		= Pickup::PickupActive()->count();
-		$data['active_delivery']	= Delivery::DeliveryActive()->count();
+		$data['active_pickup']		= Pickup::PickupActiveHome()->count();
+		$data['active_delivery']	= Delivery::DeliveryActiveHome()->count();
 		$data['pickup_count']		= Pickup::CountAllPickup()->groupBy('pick_up.courier')->get();
 		$data['delivery_count']		= Delivery::CountAllDelivery()->groupBy('delivery.courier')->get();
 

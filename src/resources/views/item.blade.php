@@ -63,8 +63,8 @@
 			<!-- Begin Item -->
 			<div class="widget has-shadow">
 				<div class="widget-header bordered no-actions d-flex align-items-center">
-					<h4>Tabel Barang</h4>
-
+					<a href="{{ url('item/report') }}" class="btn btn-gradient-01 mb-1">Cetak Laporan</a>
+					
 				</div>
 				<div class="widget-body">
 					<div class="table-responsive">

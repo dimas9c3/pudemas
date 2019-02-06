@@ -15,7 +15,7 @@
 			<div class="d-flex align-items-center">
 				<div>
 					<div class="page-header-tools">
-						<a href="#" class="btn btn-gradient-01 mb-1">Cetak Invoice</a>
+						<a href="{{ url('delivery/invoice/'.$delivery[0]->id_delivery) }}" class="btn btn-gradient-01 mb-1">Cetak Invoice</a>
 						<a href="https://api.whatsapp.com/send?phone={{ $phone }}&text=&source=&data=" class="btn btn-gradient-01 mb-1" target="_blank">Chat Customer</a>
 						@role('Kurir')
 						@php

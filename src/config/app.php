@@ -153,9 +153,10 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Yajra\DataTables\ButtonsServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
-
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -219,7 +220,7 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Telegram'  => Telegram\Bot\Laravel\Facades\Telegram::class,
-
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

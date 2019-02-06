@@ -61,7 +61,7 @@
 			<!-- Begin Supplier -->
 			<div class="widget has-shadow">
 				<div class="widget-header bordered no-actions d-flex align-items-center">
-					<h4>Tabel Data Pengambilan</h4>
+					<a href="{{ url('pickup/report') }}" class="btn btn-gradient-01 mb-1">Cetak Laporan</a>
 
 				</div>
 				<div class="widget-body">

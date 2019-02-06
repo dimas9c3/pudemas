@@ -15,8 +15,7 @@
 			<div class="d-flex align-items-center">
 				<div>
 					<div class="page-header-tools">
-						<a href="#" class="btn btn-gradient-01 mb-1">Cetak Surat Jalan</a>
-						<a href="#" class="btn btn-gradient-01 mb-1">Cetak Invoice</a>
+						<a href="{{ url('pickup/note/'. $pickup[0]->id_pickup) }}" class="btn btn-gradient-01 mb-1">Cetak Surat Jalan</a>
 						@role('Kurir')
 						@php
 						$pickup_data = array(
