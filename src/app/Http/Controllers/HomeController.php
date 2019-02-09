@@ -31,6 +31,7 @@ class HomeController extends Controller
 		$data['page']           	= 'Dashboard';
 		$data['job_pickup']     	= Pickup::PickupCourierHome(Auth::id())->get();
 		$data['free_courier']		= User::Courier()->where('is_free', '1')->count();
+		$data['free_courier_name']  = User::Courier()->where('is_free', '1')->get();
 		$data['all_courier']		= User::Courier()->count();
 		$data['active_pickup']		= Pickup::PickupActiveHome()->count();
 		$data['active_delivery']	= Delivery::DeliveryActiveHome()->count();

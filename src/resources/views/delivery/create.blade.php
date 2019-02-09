@@ -76,7 +76,7 @@
 								<div class="form-group row d-flex align-items-center mb-3">
 									<label class="col-lg-4 form-control-label d-flex justify-content-lg-start">Harga Jual Barang</label>
 									<div class="col-lg-8">
-										<input type="number" name="selling_price" id="selling-price" class="form-control input-purchase-price">
+										<input type="number" name="selling_price" id="selling-price" class="form-control input-selling-price">
 									</div>
 								</div>
 

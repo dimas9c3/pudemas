@@ -33,8 +33,8 @@
 							<i class="ion-person-stalker text-facebook"></i>
 						</div>
 						<div class="media-body align-self-center">
-							<div class="title text-facebook">Aktivitas Kurir</div>
-							<div class="number"><strong>{{ $free_courier }}</strong> Dari <strong>{{ $all_courier }}</strong> Kurir Sedang Tidak Bertugas</div>
+							<a data-toggle="modal" data-target="#modal-free-courier"><div class="title text-facebook">Aktivitas Kurir</div>
+							<div class="number"><strong>{{ $free_courier }}</strong> Dari <strong>{{ $all_courier }}</strong> Kurir Sedang Tidak Bertugas</div></a>
 						</div>
 					</div>
 				</div>
@@ -50,14 +50,14 @@
 							<i class="ion-arrow-down-a text-facebook"></i>
 						</div>
 						<div class="media-body align-self-center">
-							<div class="title text-facebook">Aktivitas Pengambilan</div>
+							<a href="{{ url('pickup/active') }}"><div class="title text-facebook">Aktivitas Pengambilan</div>
 							<div class="number">
 								@if($active_pickup)
 								<strong>{{ $active_pickup }}</strong> Job Masih Dalam Proses
 								@else
 								<strong>Tidak Ada Aktivitas Pengambilan</strong>
 								@endif
-							</div>
+							</div></a>
 						</div>
 					</div>
 				</div>
@@ -73,14 +73,14 @@
 							<i class="ion-paper-airplane text-facebook"></i>
 						</div>
 						<div class="media-body align-self-center">
-							<div class="title text-facebook">Aktivitas Pengiriman</div>
+							<a href="{{ url('delivery/activeDelivery') }}"><div class="title text-facebook">Aktivitas Pengiriman</div>
 							<div class="number">
 								@if($active_delivery)
 								<strong>{{ $active_delivery }}</strong> Job Masih Dalam Proses
 								@else
 								<strong>Tidak Ada Aktivitas Pengiriman</strong>
 								@endif
-							</div>
+							</div></a>
 						</div>
 					</div>
 				</div>
@@ -122,6 +122,42 @@
 	<!-- End Row -->
 </div>
 <!-- End Container -->
+<!-- Begin Modal Courier -->
+<div id="modal-free-courier" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Data Kurir Bebas Tugas</h4>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+						<span class="sr-only">close</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table mb-0">
+						<thead>
+							<tr>
+								<td>Nama Kurir</td>
+								<td>Status</td>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($free_courier_name as $i)
+								<tr>
+									<td>{{ $i->name }}</td>
+									<td><button class="btn btn-success btn-sm">Bebas</button></td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-shadow" data-dismiss="modal">Close</button>
+				</div>
+		</div>
+	</div>
+</div>
+<!-- End Add Other Expenses -->
 @endsection
 @section('js-route')
 <script>
