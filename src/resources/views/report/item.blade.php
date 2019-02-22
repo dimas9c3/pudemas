@@ -39,38 +39,58 @@
 							<img class="rounded-circle" src="{{ asset('storage/images/item/item-template.png') }}" style="width:100px;height:100px;" />
 						</td>
 						@endif
-				<td>
-					{{ $i->rownum }}
-				</td>
-				<td>
-					{{ $i->kategori }}
-				</td>
-				<td>
-					{{ $i->merk }}
-				</td>
-				<td>
-					{{ $i->name }}
-				</td>
-				<td>
-					Rp. {{ number_format($i->purchase_price) }}
-				</td>
-				<td>
-					Rp. {{ number_format($i->selling_price) }}
-				</td>
-			</tr>
-			@endforeach
-
-		</tbody>
-	</table>
-</div>
-</div>
-<br>
-<br>
-<div class="row mt-3">
-	<div class="col-md-12 d-flex justify-content-end align-items-sm-end">
-		<h6>Sukoharjo, Tanggal : {{ date('d-m-Y') }}</h6>
+						<td>
+							{{ $i->rownum }}
+						</td>
+						<td>
+							{{ $i->kategori }}
+						</td>
+						<td>
+							{{ $i->merk }}
+						</td>
+						<td>
+							{{ $i->name }}
+						</td>
+						<td>
+							Rp. {{ number_format($i->purchase_price) }}
+						</td>
+						<td>
+							Rp. {{ number_format($i->selling_price) }}
+						</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
 	</div>
-</div>
+	<br>
+	<br>
+	<div class="row mt-3">
+		<div class="col-md-12">
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th style="text-align: right;"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Sukoharjo, Tanggal : {{ date('d-m-Y') }}</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="{{ asset('template/backend/img/signature.png') }}" alt="signature" style="width: 100px; height: 100px;">
+						</td>
+					</tr>
+					<tr>
+						<td>PUDEMAS</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>
+	</div>
 
 </body>
 </html>

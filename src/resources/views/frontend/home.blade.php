@@ -228,45 +228,26 @@
 						<div class="col-xl-3">
 							<div class="widget">
 								<div class="widget-body">
+									<h3>PUDEMAS SYSTEM</h3>
 									<ul class="nav flex-column">
 										<li class="nav-item">
 											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-user la-2x align-middle pr-2"></i>Profile
+												<i class="la la-truck la-2x align-middle pr-2"></i>Cepat
 											</a>
 										</li>
 										<li class="nav-item">
 											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-puzzle-piece la-2x align-middle pr-2"></i>Applications
+												<i class="la la-puzzle-piece la-2x align-middle pr-2"></i>Mudah
 											</a>
 										</li>
 										<li class="nav-item">
 											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-spinner la-2x align-middle pr-2"></i>Widgets
+												<i class="la la-thumbs-up la-2x align-middle pr-2"></i>Terpercaya
 											</a>
 										</li>
 										<li class="nav-item">
 											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-share-alt la-2x align-middle pr-2"></i>UI Elements
-											</a>
-										</li>
-										<li class="nav-item">
-											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-font la-2x align-middle pr-2"></i>Icons
-											</a>
-										</li>
-										<li class="nav-item">
-											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-list-alt la-2x align-middle pr-2"></i>Forms
-											</a>
-										</li>
-										<li class="nav-item">
-											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-map la-2x align-middle pr-2"></i>Maps
-											</a>
-										</li>
-										<li class="nav-item">
-											<a class="nav-link" href="javascript:void(0)">
-												<i class="la la-file-text la-2x align-middle pr-2"></i>Pages
+												<i class="la la-wrench la-2x align-middle pr-2"></i>Garansi
 											</a>
 										</li>
 									</ul>
@@ -284,7 +265,7 @@
 												<h2>Frequently Asked Question (FAQ)</h2>
 											</div>
 											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseOne">
-												<div class="card-title">Lorem ipsum dolor sit amet?</div>
+												<div class="card-title">Cara Pemesanan Barang</div>
 											</a>
 											<div id="collapseOne" class="card-body bg-grey collapse" data-parent="#accordion">
 												<p>
@@ -292,97 +273,11 @@
 												</p>
 											</div>
 											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseTwo">
-												<div class="card-title">Nam fermentum mauris at lacus?</div>
+												<div class="card-title">Cara Mengecek Resi</div>
 											</a>
 											<div id="collapseTwo" class="card-body bg-grey collapse" data-parent="#accordion">
 												<p>
 													Etiam ut eleifend eros. Morbi in lectus ut nulla dapibus ornare. Praesent et sapien ac tortor consectetur bibendum.Nam nec sem at lacus tempor porta. Donec ultricies ante sed urna cursus, eget vestibulum libero congue
-												</p>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseThree">
-												<div class="card-title">Aenean feugiat interdum iaculis?</div>
-											</a>
-											<div id="collapseThree" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Etiam ut eleifend eros. Morbi in lectus ut nulla dapibus ornare. Praesent et sapien ac tortor consectetur bibendum.Nam nec sem at lacus tempor porta. Donec ultricies ante sed urna cursus, eget vestibulum libero congue. Praesent nibh nulla, vehicula vitae metus nec, lobortis commodo lorem. Nulla pulvinar vestibulum semper
-												</p>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseFour">
-												<div class="card-title">Curabitur eget lacinia ligula vivamus?</div>
-											</a>
-											<div id="collapseFour" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Nunc augue neque, congue a auctor at, tincidunt vel nulla. Phasellus justo urna, laoreet sit amet commodo sed, volutpat vitae eros. Praesent eu tristique diam, eu elementum ligula. Sed ac lectus non neque tristique elementum a et nisi. Donec pellentesque volutpat nisl, id commodo lacus posuere eget. 
-												</p>
-											</div>
-										</div>
-										<!-- End Widget -->
-										<!-- Begin Widget -->
-										<div class="widget">
-											<div class="widget-header no-actions d-flex align-items-center">
-												<h2>Sellers</h2>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseFive">
-												<div class="card-title">Varius natoque penatibus et magnis dis parturient?</div>
-											</a>
-											<div id="collapseFive" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Praesent nibh nulla, vehicula vitae metus nec, lobortis commodo lorem. Nulla pulvinar vestibulum semper. Curabitur tempor, orci eget laoreet lacinia, urna orci facilisis massa, nec convallis arcu lacus eu mi.  
-												</p>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseSix">
-												<div class="card-title">Phasellus facilisis purus maximus pellentesque?</div>
-											</a>
-											<div id="collapseSix" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Etiam ut eleifend eros. Morbi in lectus ut nulla dapibus ornare. Praesent et sapien ac tortor consectetur bibendum.Nam nec sem at lacus tempor porta. Donec ultricies ante sed urna cursus, eget vestibulum libero congue
-												</p>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseSeven">
-												<div class="card-title">Vitae felis sodales vestibulum?</div>
-											</a>
-											<div id="collapseSeven" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Etiam ut eleifend eros. Morbi in lectus ut nulla dapibus ornare. Praesent et sapien ac tortor consectetur bibendum.Nam nec sem at lacus tempor porta. Donec ultricies ante sed urna cursus, eget vestibulum libero congue. Praesent nibh nulla, vehicula vitae metus nec, lobortis commodo lorem. Nulla pulvinar vestibulum semper
-												</p>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseEight">
-												<div class="card-title">Mauris pharetra ante nibh et molestie ipsum?</div>
-											</a>
-											<div id="collapseEight" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Nunc augue neque, congue a auctor at, tincidunt vel nulla. Phasellus justo urna, laoreet sit amet commodo sed, volutpat vitae eros. Praesent eu tristique diam, eu elementum ligula. Sed ac lectus non neque tristique elementum a et nisi. Donec pellentesque volutpat nisl, id commodo lacus posuere eget. 
-												</p>
-											</div>
-										</div>
-										<!-- End Widget -->
-										<!-- Begin Widget -->
-										<div class="widget">
-											<div class="widget-header no-actions d-flex align-items-center">
-												<h2>Buyers</h2>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseNine">
-												<div class="card-title">Etiam fermentum leo quis venenatis placerat?</div>
-											</a>
-											<div id="collapseNine" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Praesent nibh nulla, vehicula vitae metus nec, lobortis commodo lorem. Nulla pulvinar vestibulum semper. Curabitur tempor, orci eget laoreet lacinia, urna orci facilisis massa, nec convallis arcu lacus eu mi.  
-												</p>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseTen">
-												<div class="card-title">Proin convallis volutpat lectus ac mollis?</div>
-											</a>
-											<div id="collapseTen" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Etiam ut eleifend eros. Morbi in lectus ut nulla dapibus ornare. Praesent et sapien ac tortor consectetur bibendum.Nam nec sem at lacus tempor porta. Donec ultricies ante sed urna cursus, eget vestibulum libero congue
-												</p>
-											</div>
-											<a class="card-header collapsed d-flex align-items-center" data-toggle="collapse" href="#collapseEleven">
-												<div class="card-title">Maecenas hendrerit tellus sit amet luctus fermentum?</div>
-											</a>
-											<div id="collapseEleven" class="card-body bg-grey collapse" data-parent="#accordion">
-												<p>
-													Etiam ut eleifend eros. Morbi in lectus ut nulla dapibus ornare. Praesent et sapien ac tortor consectetur bibendum.Nam nec sem at lacus tempor porta. Donec ultricies ante sed urna cursus, eget vestibulum libero congue. Praesent nibh nulla, vehicula vitae metus nec, lobortis commodo lorem. Nulla pulvinar vestibulum semper
 												</p>
 											</div>
 										</div>

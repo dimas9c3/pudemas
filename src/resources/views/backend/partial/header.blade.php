@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>{{ $title }}</title>
-	<meta name="description" content="Elisyam is a Web App and Admin Dashboard Template built with Bootstrap 4">
+	<meta name="description" content="Pickup And Delivery Management System (PUDEMAS)">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Google Fonts -->
 	<!--<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -82,6 +82,7 @@
 						<!-- Begin Navbar Menu -->
 						<ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center pull-right">
 							<!-- Begin Notifications -->
+							<!--
 							<li class="nav-item dropdown"><a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i class="la la-bell animated infinite swing"></i><span class="badge-pulse"></span></a>
 								<ul aria-labelledby="notifications" class="dropdown-menu notification">
 									<li>
@@ -148,6 +149,7 @@
 									</li>
 								</ul>
 							</li>
+							-->
 							<!-- End Notifications -->
 							<!-- User -->
 							<li class="nav-item dropdown"><a id="user" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><img src="{{ asset('template/backend/img/avatar/avatar-01.jpg') }}" alt="..." class="avatar rounded-circle"></a>
@@ -157,26 +159,11 @@
 										<img src="{{ asset('template/backend/img/avatar/avatar-01.jpg') }}" alt="..." class="rounded-circle">
 									</li>
 									<li>
-										<a href="pages-profile.html" class="dropdown-item"> 
-											Profile
-										</a>
-									</li>
-									<li>
-										<a href="app-mail.html" class="dropdown-item"> 
-											Messages
-										</a>
-									</li>
-									<li>
-										<a href="#" class="dropdown-item no-padding-bottom"> 
-											Settings
+										<a href="{{ url('/') }}" class="dropdown-item" target="_blank"> 
+											Homepage
 										</a>
 									</li>
 									<li class="separator"></li>
-									<li>
-										<a href="pages-faq.html" class="dropdown-item no-padding-top"> 
-											Faq
-										</a>
-									</li>
 									<li>
 										<a rel="nofollow" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item logout text-center"><i class="ti-power-off"></i></a>
 										<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Cek Resi - PUDEMAS</title>
-	<meta name="description" content="Elisyam is a Web App and Admin Dashboard Template built with Bootstrap 4">
+	<title>PUDEMAS SYSTEM</title>
+	<meta name="description" content="Pickup And Delivery Management System (PUDEMAS)">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Google Fonts -->
 	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -24,6 +24,8 @@
 	<link rel="stylesheet" href="{{ asset('template/backend/vendors/css/base/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('template/backend/vendors/css/base/elisyam-1.5.css') }}">
 	<link rel="stylesheet" href="{{ asset('template/backend/vendors/css/base/custom.css') }}">
+	<!-- Leaflet -->
+	<link rel="stylesheet" href="{{ asset('plugins/leaflet/leaflet.css') }}">
 		<!-- Tweaks for older IEs--><!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -78,7 +80,7 @@
 								<div class="collapse navbar-collapse" id="navbarSupportedContent">
 									<ul class="navbar-nav mr-auto">
 										<li><a href="{{ url('/') }}">Home</a></li>
-										<li><a href="components-widgets.html">About Us</a></li>
+										<li><a href="{{ route('front.about') }}">About Us</a></li>
 									</ul>
 								</div>
 							</nav>

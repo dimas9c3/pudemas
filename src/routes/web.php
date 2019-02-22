@@ -13,7 +13,8 @@
 
 Route::get('/', 'FrontController@index');
 
-Route::group(['as' => 'front-route'], function() {
+Route::group([['as' => 'front-route']], function() {
+	Route::get('/about', 'FrontController@about')->name('front.about');
 	Route::get('/cekresi', 'FrontController@checkResi');
 });
 

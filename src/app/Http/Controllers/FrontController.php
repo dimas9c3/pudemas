@@ -14,27 +14,33 @@ class FrontController extends Controller
 		return view('frontend.home', compact('delivery'));
 	}
 
+	public function about()
+	{
+		return view('frontend.about');
+	}
+
 	public function checkResi(Request $request)
 	{
+		
+		$id_resi 				= $request->id_resi;
+
+		$attributeNames 		= array(
+			'id_resi'			=> 'Nomor Resi',
+		);
+
+		$validator 				= Validator::make($request->all(), [
+			'id_resi'			=> 'required|min:14',
+		]);
+
+		$validator->setAttributeNames($attributeNames);
+
+		if($validator->fails()) {
+			return redirect()->back()
+			->withErrors($validator)
+			->withInput();
+		}
+
 		try {
-			$id_resi 				= $request->id_resi;
-
-			$attributeNames 		= array(
-				'id_resi'			=> 'Nomor Resi',
-			);
-
-			$validator 				= Validator::make($request->all(), [
-				'id_resi'			=> 'required|min:14',
-			]);
-
-			$validator->setAttributeNames($attributeNames);
-
-			if($validator->fails()) {
-				return redirect()->back()
-				->withErrors($validator)
-				->withInput();
-			}
-
 			$data['delivery']         = Delivery::select([
 				'delivery.id as id_delivery',
 				'delivery.is_pickup_first',
@@ -66,8 +72,6 @@ class FrontController extends Controller
 		} catch (\Exception $e) {
 			return redirect()->back()->with('error', 'Kami Tidak Menemukan Data Nomor Resi Anda');
 		}
-
-		
 		
 	}
 }

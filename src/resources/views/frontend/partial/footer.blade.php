@@ -29,3 +29,5 @@
 <script src="{{ asset('template/backend/vendors/js/bootstrap-wizard/bootstrap.wizard.min.js') }}"></script>
 <script src="{{ asset('template/backend/js/components/wizard/form-wizard.min.js') }}"></script>
 <!-- End Page Vendor Js -->
+<!-- Leaflet -->
+<script src="{{ asset('plugins/leaflet/leaflet.js') }}"></script>
