@@ -62,14 +62,15 @@
 							<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Longtitude Default Toko</label>
 							<div class="col-lg-6">
 								<input type="text" class="form-control" name="lng_start" value="{{ $setting[0]->lng_start }}" required>
+								<input type="hidden" class="form-control" name="default_send_cost" value="{{ $setting[0]->default_send_cost }}" required>
 							</div>
 						</div>
-						<div class="form-group row d-flex align-items-center mb-5">
+						<!--<div class="form-group row d-flex align-items-center mb-5">
 							<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Tarif Kirim Per KM</label>
 							<div class="col-lg-6">
-								<input type="number" class="form-control" name="default_send_cost" value="{{ $setting[0]->default_send_cost }}" required>
+								
 							</div>
-						</div>
+						</div>-->
 						<div class="form-group row d-flex align-items-center mb-5">
 							<label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Update Interval Pengawas</label>
 							<div class="col-lg-6">
