@@ -247,6 +247,8 @@
 		id: 'mapbox.streets'
 	}).addTo(mymap);
 	
+	var newMark;
+	
 	function locate() {
 		$.ajax({
 			url         : '{{ url('pickup/getPickupLocation') }}',
@@ -254,12 +256,16 @@
 			dataType    : 'JSON',
 			data        : {_token:token, id: '{{ $pickup[0]->id_pickup }}' },
 			success     : function(data) {
-				mymap.removeLayer(newMark);
 				console.log('Updated Successfully');
 
+				// remove previous marker
+				if(newMark) {
+					mymap.removeLayer(newMark);
+				}
+				
 				mymap.panTo([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)], 13);
 
-				var newMark = L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
+				newMark = new L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
 
 			}
 		});
