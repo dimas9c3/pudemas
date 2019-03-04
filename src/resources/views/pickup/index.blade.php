@@ -61,7 +61,7 @@
 			<!-- Begin Supplier -->
 			<div class="widget has-shadow">
 				<div class="widget-header bordered no-actions d-flex align-items-center">
-					<a href="{{ url('pickup/report') }}" class="btn btn-gradient-01 mb-1">Cetak Laporan</a>
+					<button data-toggle="modal" data-target="#report-modal" class="btn btn-gradient-01 mb-1">Cetak Laporan</button>
 
 				</div>
 				<div class="widget-body">
@@ -95,6 +95,42 @@
 	<!-- End Row -->
 </div>
 <!-- End Container -->
+<!-- Begin Modal Report -->
+<div id="report-modal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form method="POST" enctype="multipart/form-data" action="{{ url('pickup/report') }}">
+				@csrf
+				<div class="modal-header">
+					<h4 class="modal-title">Generate Report</h4>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+						<span class="sr-only">close</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group row d-flex align-items-center mb-2">
+						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Range Awal</label>
+						<div class="col-lg-9">
+							<input type="text" name="start_date" class="form-control datepicker" value="{{ date('d-m-Y') }}" required>
+						</div>
+					</div>
+					<div class="form-group row d-flex align-items-center mb-2">
+						<label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Range Akhir</label>
+						<div class="col-lg-9">
+							<input type="text" name="end_date" class="form-control datepicker" value="{{ date('d-m-Y') }}" required>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="button" class="btn btn-shadow" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End Modal Report -->
 @endsection
 @section('js-route')
 <script>
@@ -110,6 +146,7 @@
 		document.getElementById("pickup-link2").setAttribute('aria-expanded','TRUE');
 		document.getElementById("dropdown-pickup").classList.add('show');
 		document.getElementById("pickup-index-link").classList.add('active');
+		datepicker.datepicker();
 		datatables.table_pickup();
 	});
 </script>

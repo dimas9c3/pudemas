@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'pickup-route']], function() {
 	Route::get('/pickup/cancelPickup', 'PickupController@cancelPickup')->name('cancelPickup');
 	Route::get('/pickup/recyclePickup', 'PickupController@recyclePickup')->name('recyclePickup');
 	Route::get('/pickup/updatedActivity', 'PickupController@updatedActivity');
-	Route::get('/pickup/report', 'PickupController@reportPickup');
+	Route::post('/pickup/report', 'PickupController@reportPickup');
 	Route::get('/pickup/note/{id}', 'PickupController@notePickup');
 });
 
@@ -131,7 +131,7 @@ Route::group(['middleware' => ['auth'], ['as' => 'delivery-route']], function() 
 	Route::get('/delivery/recycleDelivery', 'DeliveryController@recycleDelivery')->name('recycleDelivery');
 	Route::get('/delivery/changeDeliveryJob', 'DeliveryController@changeDeliveryJob')->name('changeDeliveryJob');
 	Route::post('/delivery/finishDelivery', 'DeliveryController@finishDelivery');
-	Route::get('/delivery/report', 'DeliveryController@reportDelivery');
+	Route::post('/delivery/report', 'DeliveryController@reportDelivery');
 	Route::get('/delivery/invoice/{id}', 'DeliveryController@invoiceDelivery');
 });
 

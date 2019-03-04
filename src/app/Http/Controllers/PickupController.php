@@ -911,16 +911,21 @@ class PickupController extends Controller
 
 	/* Report */
 
-	public function reportPickup()
+	public function reportPickup(Request $request)
 	{
+		$start_date 		= $request->start_date;
+		$end_date 			= $request->end_date;
+
 		$pickup 			= Pickup::Pickup()
+			->where('pick_up.created_at', '>=', Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'))
+			->where('pick_up.created_at', '<=', Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d'))
 			->orderBy('pick_up.created_at', 'DESC')
 			->orderBy('pick_up_detail.is_first_row', 'DESC')
 			->get();
 
-		$pdf = PDF::loadView('report.pickup', compact('pickup'));
+		$pdf = PDF::loadView('report.pickup', compact('pickup', 'start_date', 'end_date'));
 
-        return $pdf->stream('pickup-report-'.Carbon::now());
+        return $pdf->stream('pickup-report-'.$start_date.'-'.$end_date);
 	}
 
 	public function notePickup($id_pickup)

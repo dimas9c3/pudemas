@@ -254,11 +254,12 @@
 			dataType    : 'JSON',
 			data        : {_token:token, id: '{{ $pickup[0]->id_pickup }}' },
 			success     : function(data) {
+				mymap.removeLayer(newMark);
 				console.log('Updated Successfully');
 
 				mymap.panTo([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)], 13);
 
-				var newMark = new L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
+				var newMark = L.marker([JSON.parse(data[0].latitude), JSON.parse(data[0].longtitude)]).addTo(mymap).bindPopup("<b>Lokasi Kurir</b>").openPopup();
 
 			}
 		});

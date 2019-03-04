@@ -980,16 +980,22 @@ class DeliveryController extends Controller
 		}
 	}
 
-	public function reportDelivery()
+	public function reportDelivery(Request $request)
 	{
+
+		$start_date 		= $request->start_date;
+		$end_date 			= $request->end_date;
+
 		$delivery 			= Delivery::Delivery()
+		->where('delivery.created_at', '>=', Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'))
+		->where('delivery.created_at', '<=', Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d'))
 		->orderBy('delivery.created_at', 'DESC')
 		->orderBy('delivery_detail.is_first_row', 'DESC')
 		->get();
 
-		$pdf = PDF::loadView('report.delivery', compact('delivery'));
+		$pdf = PDF::loadView('report.delivery', compact('delivery','start_date', 'end_date'));
 
-        return $pdf->stream('delivery-report-'.Carbon::now());
+        return $pdf->stream('delivery-report-'.$start_date.'-'.$end_date);
 	}
 
 	public function invoiceDelivery($id_delivery)
