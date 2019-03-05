@@ -278,9 +278,9 @@ class ItemController extends Controller
 				$item = new Item();
 				$item->item_category1   = $request->item_category1;
 				$item->item_category2   = $request->item_category2;
-				$item->name             = $request->name;
-				$item->purchase_price   = $request->purchase_price;
-				$item->selling_price    = $request->selling_price;
+				$item->name             = strip_tags($request->name);
+				$item->purchase_price   = strip_tags($request->purchase_price);
+				$item->selling_price    = strip_tags($request->selling_price);
 				$item->image            = $filenametostore;
 				$item->save();
 
@@ -433,7 +433,7 @@ class ItemController extends Controller
 			}
 
 			$crud               = new ItemCategory1;
-			$crud->name         = $request->name;
+			$crud->name         = strip_tags($request->name);
 			$crud->save();
 
 			return redirect()->route('item')
@@ -459,7 +459,7 @@ class ItemController extends Controller
 			}
 
 			$crud               = new ItemCategory2;
-			$crud->name         = $request->name;
+			$crud->name         = strip_tags($request->name);
 			$crud->save();
 
 			return redirect()->route('item')
